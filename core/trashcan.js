@@ -178,7 +178,7 @@ Blockly.Trashcan.prototype.createDom = function() {
        'clip-path': 'url(#blocklyTrashBodyClipPath)'},
       this.svgGroup_);
   body.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-      Blockly.pathToMedia + Blockly.SPRITE.url);
+      this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
   var clip = Blockly.createSvgElement('clipPath',
       {'id': 'blocklyTrashLidClipPath'},
@@ -190,7 +190,7 @@ Blockly.Trashcan.prototype.createDom = function() {
        'clip-path': 'url(#blocklyTrashLidClipPath)'},
       this.svgGroup_);
   this.svgLid_.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-      Blockly.pathToMedia + Blockly.SPRITE.url);
+      this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
   this.animateLid_();
   return this.svgGroup_;
@@ -201,7 +201,6 @@ Blockly.Trashcan.prototype.createDom = function() {
  */
 Blockly.Trashcan.prototype.init = function() {
   this.setOpen_(false);
-  this.position_();
   // If the document resizes, reposition the trash can.
   Blockly.bindEvent_(window, 'resize', this, this.position_);
 };

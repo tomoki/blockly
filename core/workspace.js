@@ -32,14 +32,16 @@ goog.require('goog.math');
 /**
  * Class for a workspace.  This is a data structure that contains blocks.
  * There is no UI, and can be created headlessly.
+ * @param {Object} opt_options Dictionary of options.
  * @constructor
  */
-Blockly.Workspace = function() {
+Blockly.Workspace = function(opt_options) {
   /**
    * @type {!Array.<!Blockly.Block>}
    * @private
    */
   this.topBlocks_ = [];
+  this.options = opt_options || {};
 };
 
 /**
@@ -194,27 +196,26 @@ Blockly.Workspace.prototype.fireChangeEvent = function() {
 Blockly.Workspace.prototype.updateToolbox = function(tree) {
   tree = Blockly.parseToolboxTree_(tree);
   if (!tree) {
-    if (Blockly.languageTree) {
+    if (this.options.languageTree) {
       throw 'Can\'t nullify an existing toolbox.';
     }
     // No change (null to null).
     return;
   }
-  if (!Blockly.languageTree) {
+  if (!this.options.languageTree) {
     throw 'Existing toolbox is null.  Can\'t create new toolbox.';
   }
-  var hasCategories = !!tree.getElementsByTagName('category').length;
-  if (hasCategories) {
+  if (this.options.hasCategories) {
     if (!this.toolbox_) {
       throw 'Existing toolbox has no categories.  Can\'t change mode.';
     }
-    Blockly.languageTree = tree;
+    this.options.languageTree = tree;
     this.toolbox_.populate_();
   } else {
     if (!this.flyout_) {
       throw 'Existing toolbox has categories.  Can\'t change mode.';
     }
-    Blockly.languageTree = tree;
-    this.flyout_.show(Blockly.languageTree.childNodes);
+    this.options.languageTree = tree;
+    this.flyout_.show(this.options.languageTree.childNodes);
   }
 };

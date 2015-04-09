@@ -115,7 +115,7 @@ Blockly.Toolbox.prototype.CONFIG_ = {
  *     blocks.
  */
 Blockly.Toolbox.prototype.init = function(workspace) {
-  this.CONFIG_['cleardotPath'] = Blockly.pathToMedia + '1x1.gif';
+  this.CONFIG_['cleardotPath'] = workspace.options.pathToMedia + '1x1.gif';
   this.CONFIG_['cssCollapsedFolderIcon'] =
       'blocklyTreeIconClosed' + (Blockly.RTL ? 'Rtl' : 'Ltr');
   var tree = new Blockly.Toolbox.TreeControl(this, this.CONFIG_);

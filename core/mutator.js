@@ -95,9 +95,12 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   Blockly.createSvgElement('rect',
       {'class': 'blocklyMutatorBackground',
        'height': '100%', 'width': '100%'}, this.svgDialog_);
+  var workspaceOptions = {
+
+  };
   var mutator = this;
   this.workspace_ = new Blockly.WorkspaceSvg(
-      function() {return mutator.getFlyoutMetrics_();}, null);
+      function() {return mutator.getFlyoutMetrics_();}, null, workspaceOptions);
   this.svgDialog_.appendChild(
       this.workspace_.createDom('blocklyMutatorBackground'));
   this.workspace_.addFlyout();

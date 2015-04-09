@@ -41,11 +41,12 @@ goog.require('goog.math.Coordinate');
  * scrollbars, bubbles, and dragging.
  * @param {Function} getMetrics A function that returns size/scrolling metrics.
  * @param {Function} setMetrics A function that sets size/scrolling metrics.
+ * @param {Object} options Dictionary of options.
  * @extends {Blockly.Workspace}
  * @constructor
  */
-Blockly.WorkspaceSvg = function(getMetrics, setMetrics) {
-  Blockly.WorkspaceSvg.superClass_.constructor.call(this);
+Blockly.WorkspaceSvg = function(getMetrics, setMetrics, options) {
+  Blockly.WorkspaceSvg.superClass_.constructor.call(this, options);
   this.getMetrics = getMetrics;
   this.setMetrics = setMetrics;
 
@@ -119,6 +120,9 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   }
   this.svgBlockCanvas_ = Blockly.createSvgElement('g', {}, this.svgGroup_);
   this.svgBubbleCanvas_ = Blockly.createSvgElement('g', {}, this.svgGroup_);
+  if (this.options.hasTrashcan) {
+    this.addTrashcan_();
+  }
   this.fireChangeEvent();
   return this.svgGroup_;
 };
@@ -149,14 +153,13 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
 
 /**
  * Add a trashcan.
+ * @private
  */
-Blockly.WorkspaceSvg.prototype.addTrashcan = function() {
-  if (Blockly.hasTrashcan && !Blockly.readOnly) {
-    this.trashcan = new Blockly.Trashcan(this);
-    var svgTrashcan = this.trashcan.createDom();
-    this.svgGroup_.insertBefore(svgTrashcan, this.svgBlockCanvas_);
-    this.trashcan.init();
-  }
+Blockly.WorkspaceSvg.prototype.addTrashcan_ = function() {
+  this.trashcan = new Blockly.Trashcan(this);
+  var svgTrashcan = this.trashcan.createDom();
+  this.svgGroup_.insertBefore(svgTrashcan, this.svgBlockCanvas_);
+  this.trashcan.init();
 };
 
 /**

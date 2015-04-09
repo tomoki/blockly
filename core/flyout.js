@@ -45,9 +45,11 @@ Blockly.Flyout = function() {
    * @type {!Blockly.Workspace}
    * @private
    */
+  var workspaceOptions = {};
   this.workspace_ = new Blockly.WorkspaceSvg(
       function() {return flyout.getMetrics_();},
-      function(ratio) {return flyout.setMetrics_(ratio);});
+      function(ratio) {return flyout.setMetrics_(ratio);},
+      workspaceOptions);
   this.workspace_.isFlyout = true;
 
   /**

@@ -248,7 +248,7 @@ Blockly.createDom_ = function(container, options) {
       {'x': -5000, 'y': -10000, 'z': 20000}, feSpecularLighting);
   Blockly.createSvgElement('feComposite',
       {'in': 'specOut', 'in2': 'SourceAlpha', 'operator': 'in',
-      'result': 'specOut'}, filter);
+       'result': 'specOut'}, filter);
   Blockly.createSvgElement('feComposite',
       {'in': 'SourceGraphic', 'in2': 'specOut', 'operator': 'arithmetic',
        'k1': 0, 'k2': 1, 'k3': 1, 'k4': 0}, filter);
@@ -309,11 +309,16 @@ Blockly.createDom_ = function(container, options) {
   }
 
   var mainWorkspace = new Blockly.WorkspaceSvg(
-      Blockly.getMainWorkspaceMetrics_,
-      Blockly.setMainWorkspaceMetrics_);
-  mainWorkspace.options = options;
-  goog.mixin(Blockly, options);  // TODO: Delete this (#singletonHunt).
-  Blockly.mainWorkspace = mainWorkspace;  // TODO: Delete this (#singletonHunt).
+      Blockly.getMainWorkspaceMetrics_, Blockly.setMainWorkspaceMetrics_,
+      options);
+  // TODO: Delete this (#singletonHunt).
+  Blockly.RTL = options.RTL;
+  Blockly.readOnly = options.readOnly;
+  Blockly.hasScrollbars = options.hasScrollbars;
+  Blockly.hasSounds = options.hasSounds;
+  Blockly.languageTree = options.languageTree;
+  // TODO: Delete this (#singletonHunt).
+  Blockly.mainWorkspace = mainWorkspace;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
   mainWorkspace.maxBlocks = options.maxBlocks;
   mainWorkspace.gridPattern_ = gridPattern;
@@ -452,18 +457,16 @@ Blockly.init_ = function(mainWorkspace) {
     mainWorkspace.scrollbar.resize();
   }
 
-  mainWorkspace.addTrashcan();
-
   // Load the sounds.
   if (options.hasSounds) {
     Blockly.loadAudio_(
-        [Blockly.pathToMedia + 'click.mp3',
-         Blockly.pathToMedia + 'click.wav',
-         Blockly.pathToMedia + 'click.ogg'], 'click');
+        [options.pathToMedia + 'click.mp3',
+         options.pathToMedia + 'click.wav',
+         options.pathToMedia + 'click.ogg'], 'click');
     Blockly.loadAudio_(
-        [Blockly.pathToMedia + 'delete.mp3',
-         Blockly.pathToMedia + 'delete.ogg',
-         Blockly.pathToMedia + 'delete.wav'], 'delete');
+        [options.pathToMedia + 'delete.mp3',
+         options.pathToMedia + 'delete.ogg',
+         options.pathToMedia + 'delete.wav'], 'delete');
 
     // Bind temporary hooks that preload the sounds.
     var soundBinds = [];
