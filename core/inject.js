@@ -101,11 +101,11 @@ Blockly.parseOptions_ = function(options) {
     var hasCollapse = false;
     var hasComments = false;
     var hasDisable = false;
-    var tree = null;
+    var languageTree = null;
   } else {
-    var tree = Blockly.parseToolboxTree_(options['toolbox']);
-    var hasCategories = Boolean(tree &&
-        tree.getElementsByTagName('category').length);
+    var languageTree = Blockly.parseToolboxTree_(options['toolbox']);
+    var hasCategories = Boolean(languageTree &&
+        languageTree.getElementsByTagName('category').length);
     var hasTrashcan = options['trashcan'];
     if (hasTrashcan === undefined) {
       hasTrashcan = hasCategories;
@@ -173,7 +173,7 @@ Blockly.parseOptions_ = function(options) {
     hasTrashcan: hasTrashcan,
     hasSounds: hasSounds,
     hasCss: hasCss,
-    languageTree: tree,
+    languageTree: languageTree,
     gridOptions: grid,
     enableRealtime: enableRealtime,
     realtimeOptions: realtimeOptions
@@ -215,7 +215,9 @@ Blockly.createDom_ = function(container, options) {
     'xmlns:xlink': 'http://www.w3.org/1999/xlink',
     'version': '1.1',
     'class': 'blocklySvg'
-  }, null);
+  }, container);
+  // TODO: Delete this (#singletonHunt).
+  Blockly.svg = svg;
   /*
   <defs>
     ... filters go here ...
@@ -314,9 +316,7 @@ Blockly.createDom_ = function(container, options) {
   // TODO: Delete this (#singletonHunt).
   Blockly.RTL = options.RTL;
   Blockly.readOnly = options.readOnly;
-  Blockly.hasScrollbars = options.hasScrollbars;
-  Blockly.hasSounds = options.hasSounds;
-  Blockly.languageTree = options.languageTree;
+  Blockly.pathToMedia = options.pathToMedia;
   // TODO: Delete this (#singletonHunt).
   Blockly.mainWorkspace = mainWorkspace;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
@@ -324,13 +324,6 @@ Blockly.createDom_ = function(container, options) {
   mainWorkspace.gridPattern_ = gridPattern;
 
   if (!options.readOnly) {
-    // Determine if there needs to be a category tree, or a simple list of
-    // blocks.  This cannot be changed later, since the UI is very different.
-    if (options.hasCategories) {
-      mainWorkspace.toolbox_ = new Blockly.Toolbox(svg, container);
-    } else if (options.languageTree) {
-      mainWorkspace.addFlyout();
-    }
     if (!options.hasScrollbars) {
       var workspaceChanged = function() {
         if (Blockly.dragMode_ == 0) {
@@ -381,16 +374,14 @@ Blockly.createDom_ = function(container, options) {
   }
 
   svg.appendChild(Blockly.Tooltip.createDom());
-
-  // The SVG is now fully assembled.  Add it to the container.
-  container.appendChild(svg);
-  Blockly.svg = svg;
+  // The SVG is now fully assembled.
   Blockly.svgResize();
 
   // Create an HTML container for popup overlays (e.g. editor widgets).
   Blockly.WidgetDiv.DIV = goog.dom.createDom('div', 'blocklyWidgetDiv');
   Blockly.WidgetDiv.DIV.style.direction = Blockly.RTL ? 'rtl' : 'ltr';
   document.body.appendChild(Blockly.WidgetDiv.DIV);
+
   return mainWorkspace;
 };
 

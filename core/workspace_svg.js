@@ -123,6 +123,15 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   if (this.options.hasTrashcan) {
     this.addTrashcan_();
   }
+
+  // Determine if there needs to be a category tree, or a simple list of
+  // blocks.  This cannot be changed later, since the UI is very different.
+  if (this.options.hasCategories) {
+    this.toolbox_ = new Blockly.Toolbox(Blockly.svg);
+  } else if (this.options.languageTree) {
+    this.addFlyout_();
+  }
+
   this.fireChangeEvent();
   return this.svgGroup_;
 };
@@ -164,8 +173,9 @@ Blockly.WorkspaceSvg.prototype.addTrashcan_ = function() {
 
 /**
  * Add a flyout.
+ * @private
  */
-Blockly.WorkspaceSvg.prototype.addFlyout = function() {
+Blockly.WorkspaceSvg.prototype.addFlyout_ = function() {
   this.flyout_ = new Blockly.Flyout();
   this.flyout_.autoClose = false;
   var svgFlyout = this.flyout_.createDom();

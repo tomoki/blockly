@@ -41,21 +41,13 @@ goog.require('goog.ui.tree.TreeNode');
  * Class for a Toolbox.
  * Creates the toolbox's DOM.  Only needs to be called once.
  * @param {!Element} svg The top-level SVG element.
- * @param {!Element} container The SVG's HTML parent element.
  * @constructor
  */
-Blockly.Toolbox = function(svg, container) {
+Blockly.Toolbox = function(svg) {
   // Create an HTML container for the Toolbox menu.
   this.HtmlDiv = goog.dom.createDom('div', 'blocklyToolboxDiv');
   this.HtmlDiv.setAttribute('dir', Blockly.RTL ? 'RTL' : 'LTR');
-  container.appendChild(this.HtmlDiv);
-
-  /**
-   * @type {!Blockly.Flyout}
-   * @private
-   */
-  this.flyout_ = new Blockly.Flyout();
-  svg.appendChild(this.flyout_.createDom());
+  svg.parentNode.insertBefore(this.HtmlDiv, svg);
 
   // Clicking on toolbar closes popups.
   Blockly.bindEvent_(this.HtmlDiv, 'mousedown', this,
@@ -115,6 +107,14 @@ Blockly.Toolbox.prototype.CONFIG_ = {
  *     blocks.
  */
 Blockly.Toolbox.prototype.init = function(workspace) {
+  /**
+   * @type {!Blockly.Flyout}
+   * @private
+   */
+  this.flyout_ = new Blockly.Flyout();
+  goog.dom.insertSiblingAfter(this.flyout_.createDom(), workspace.svgGroup_);
+  this.flyout_.init(workspace);
+
   this.CONFIG_['cleardotPath'] = workspace.options.pathToMedia + '1x1.gif';
   this.CONFIG_['cssCollapsedFolderIcon'] =
       'blocklyTreeIconClosed' + (Blockly.RTL ? 'Rtl' : 'Ltr');
@@ -124,10 +124,8 @@ Blockly.Toolbox.prototype.init = function(workspace) {
   tree.setShowLines(false);
   tree.setShowExpandIcons(false);
   tree.setSelectedItem(null);
-
   this.HtmlDiv.style.display = 'block';
-  this.flyout_.init(workspace);
-  this.populate_();
+  this.populate_(workspace.options.languageTree);
   tree.render(this.HtmlDiv);
 
   // If the document resizes, reposition the toolbox.
@@ -163,7 +161,7 @@ Blockly.Toolbox.prototype.position_ = function() {
  * Fill the toolbox with categories and blocks.
  * @private
  */
-Blockly.Toolbox.prototype.populate_ = function() {
+Blockly.Toolbox.prototype.populate_ = function(newTree) {
   var rootOut = this.tree_;
   rootOut.removeChildren();  // Delete any existing content.
   rootOut.blocks = [];
@@ -197,7 +195,7 @@ Blockly.Toolbox.prototype.populate_ = function() {
       }
     }
   }
-  syncTrees(Blockly.languageTree, this.tree_);
+  syncTrees(newTree, this.tree_);
 
   if (rootOut.blocks.length) {
     throw 'Toolbox cannot have both blocks and categories in the root level.';
