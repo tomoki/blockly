@@ -20,8 +20,8 @@
 
 /**
  * @fileoverview Utility methods.
- * These methods are not specific to Blockly, and could be factored out if
- * a JavaScript framework such as Closure were used.
+ * These methods are not specific to Blockly, and could be factored out into
+ * a JavaScript framework such as Closure.
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
@@ -373,6 +373,25 @@ Blockly.mouseToSvg = function(e) {
   return Blockly.convertCoordinates(e.clientX + scrollX,
                                     e.clientY + scrollY, true);
 };
+
+/**
+ * Starting with an element, walk up the tree looking for the first SVG
+ * container.
+ * @param {!Element} element Element in an SVG.
+ * @return {Element} SVG element or null if none.
+ */
+Blockly.getSvg = function(element) {
+  if (element.svg_) {
+    return element.svg_;
+  }
+  var svg = element;
+  while (svg && svg.nodeName.toLowerCase() != 'svg') {
+    svg = element.parentNode;
+  }
+  element.svg_ = svg;
+  return svg;
+};
+
 
 /**
  * Given an array of strings, return the length of the shortest one.

@@ -119,11 +119,12 @@ Blockly.Css.setCursor = function(cursor) {
   }
   // Set cursor on the SVG surface as well, so that rapid movements
   // don't result in cursor changing to an arrow momentarily.
-  if (Blockly.svg) {
+  var svg = Blockly.svg;
+  if (svg) {
     if (cursor == Blockly.Css.Cursor.OPEN) {
-      Blockly.svg.style.cursor = '';
+      svg.style.cursor = '';
     } else {
-      Blockly.svg.style.cursor = url;
+      svg.style.cursor = url;
     }
   }
 };

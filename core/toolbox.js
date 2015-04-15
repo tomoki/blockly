@@ -39,27 +39,17 @@ goog.require('goog.ui.tree.TreeNode');
 
 /**
  * Class for a Toolbox.
- * Creates the toolbox's DOM.  Only needs to be called once.
- * @param {!Element} svg The top-level SVG element.
+ * Creates the toolbox's DOM.
+ * @param {!Blockly.Workspace} workspace The workspace in which to create new
+ *     blocks.
  * @constructor
  */
-Blockly.Toolbox = function(svg) {
-  // Create an HTML container for the Toolbox menu.
-  this.HtmlDiv = goog.dom.createDom('div', 'blocklyToolboxDiv');
-  this.HtmlDiv.setAttribute('dir', Blockly.RTL ? 'RTL' : 'LTR');
-  svg.parentNode.insertBefore(this.HtmlDiv, svg);
-
-  // Clicking on toolbar closes popups.
-  Blockly.bindEvent_(this.HtmlDiv, 'mousedown', this,
-      function(e) {
-        if (Blockly.isRightButton(e) || e.target == this.HtmlDiv) {
-          // Close flyout.
-          Blockly.hideChaff(false);
-        } else {
-          // Just close popups.
-          Blockly.hideChaff(true);
-        }
-      });
+Blockly.Toolbox = function(workspace) {
+  /**
+   * @type {!Blockly.Workspace}
+   * @private
+   */
+  this.workspace_ = workspace;
 };
 
 /**
@@ -103,10 +93,27 @@ Blockly.Toolbox.prototype.CONFIG_ = {
 
 /**
  * Initializes the toolbox.
- * @param {!Blockly.Workspace} workspace The workspace in which to create new
- *     blocks.
  */
-Blockly.Toolbox.prototype.init = function(workspace) {
+Blockly.Toolbox.prototype.init = function() {
+  var workspace = this.workspace_;
+  var svg = Blockly.getSvg(workspace.svgGroup_);
+
+  // Create an HTML container for the Toolbox menu.
+  this.HtmlDiv = goog.dom.createDom('div', 'blocklyToolboxDiv');
+  this.HtmlDiv.setAttribute('dir', Blockly.RTL ? 'RTL' : 'LTR');
+  svg.parentNode.insertBefore(this.HtmlDiv, svg);
+
+  // Clicking on toolbar closes popups.
+  Blockly.bindEvent_(this.HtmlDiv, 'mousedown', this,
+      function(e) {
+        if (Blockly.isRightButton(e) || e.target == this.HtmlDiv) {
+          // Close flyout.
+          Blockly.hideChaff(false);
+        } else {
+          // Just close popups.
+          Blockly.hideChaff(true);
+        }
+      });
   /**
    * @type {!Blockly.Flyout}
    * @private
