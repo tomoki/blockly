@@ -229,7 +229,7 @@ Blockly.Trashcan.prototype.position_ = function() {
     // There are no metrics available (workspace is probably not visible).
     return;
   }
-  if (Blockly.RTL) {
+  if (this.workspace_.RTL) {
     this.left_ = this.MARGIN_SIDE_;
   } else {
     this.left_ = metrics.viewWidth + metrics.absoluteLeft -
@@ -277,8 +277,8 @@ Blockly.Trashcan.prototype.animateLid_ = function() {
   this.lidOpen_ = goog.math.clamp(this.lidOpen_, 0, 1);
   var lidAngle = this.lidOpen_ * 45;
   this.svgLid_.setAttribute('transform', 'rotate(' +
-      (Blockly.RTL ? -lidAngle : lidAngle) + ', ' +
-      (Blockly.RTL ? 4 : this.WIDTH_ - 4) + ', ' +
+      (this.workspace_.RTL ? -lidAngle : lidAngle) + ', ' +
+      (this.workspace_.RTL ? 4 : this.WIDTH_ - 4) + ', ' +
       (this.LID_HEIGHT_ - 2) + ')');
   var opacity = goog.math.lerp(0.4, 0.8, this.lidOpen_);
   this.svgGroup_.style.opacity = opacity;

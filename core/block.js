@@ -113,6 +113,7 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
 
   this.workspace = workspace;
   this.isInFlyout = workspace.isFlyout;
+  this.RTL = workspace.RTL;
 
   // Copy the type-specific functions and data from the prototype.
   if (prototypeName) {
@@ -229,7 +230,7 @@ Blockly.Block.prototype.unplug = function(healStack, bump) {
   }
   if (bump) {
     // Bump the block sideways.
-    var dx = Blockly.SNAP_RADIUS * (Blockly.RTL ? -1 : 1);
+    var dx = Blockly.SNAP_RADIUS * (this.RTL ? -1 : 1);
     var dy = Blockly.SNAP_RADIUS * 2;
     this.moveBy(dx, dy);
   }
@@ -248,7 +249,7 @@ Blockly.Block.prototype.duplicate_ = function() {
       /** @type {!Blockly.Workspace} */ (this.workspace), xmlBlock);
   // Move the duplicate next to the old block.
   var xy = this.getRelativeToSurfaceXY();
-  if (Blockly.RTL) {
+  if (this.RTL) {
     xy.x -= Blockly.SNAP_RADIUS;
   } else {
     xy.x += Blockly.SNAP_RADIUS;

@@ -135,7 +135,7 @@ Blockly.FieldDate.prototype.showEditor_ = function() {
   } else {
     xy.y += borderBBox.height - 1;
   }
-  if (Blockly.RTL) {
+  if (this.sourceBlock_.RTL) {
     xy.x += borderBBox.width;
     xy.x -= pickerSize.width;
     // Don't go offscreen left.

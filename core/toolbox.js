@@ -100,7 +100,7 @@ Blockly.Toolbox.prototype.init = function() {
 
   // Create an HTML container for the Toolbox menu.
   this.HtmlDiv = goog.dom.createDom('div', 'blocklyToolboxDiv');
-  this.HtmlDiv.setAttribute('dir', Blockly.RTL ? 'RTL' : 'LTR');
+  this.HtmlDiv.setAttribute('dir', this.workspace_.RTL ? 'RTL' : 'LTR');
   svg.parentNode.insertBefore(this.HtmlDiv, svg);
 
   // Clicking on toolbar closes popups.
@@ -114,17 +114,20 @@ Blockly.Toolbox.prototype.init = function() {
           Blockly.hideChaff(true);
         }
       });
+  var workspaceOptions = {
+    RTL: workspace.RTL
+  };
   /**
    * @type {!Blockly.Flyout}
    * @private
    */
-  this.flyout_ = new Blockly.Flyout();
+  this.flyout_ = new Blockly.Flyout(workspaceOptions);
   goog.dom.insertSiblingAfter(this.flyout_.createDom(), workspace.svgGroup_);
   this.flyout_.init(workspace);
 
   this.CONFIG_['cleardotPath'] = workspace.options.pathToMedia + '1x1.gif';
   this.CONFIG_['cssCollapsedFolderIcon'] =
-      'blocklyTreeIconClosed' + (Blockly.RTL ? 'Rtl' : 'Ltr');
+      'blocklyTreeIconClosed' + (this.workspace_.RTL ? 'Rtl' : 'Ltr');
   var tree = new Blockly.Toolbox.TreeControl(this, this.CONFIG_);
   this.tree_ = tree;
   tree.setShowRootNode(false);
@@ -150,7 +153,7 @@ Blockly.Toolbox.prototype.position_ = function() {
   var treeDiv = this.HtmlDiv;
   var svgBox = goog.style.getBorderBox(Blockly.svg);
   var svgSize = Blockly.svgSize();
-  if (Blockly.RTL) {
+  if (this.workspace_.RTL) {
     var xy = Blockly.convertCoordinates(0, 0, false);
     treeDiv.style.left = (xy.x + svgSize.width - treeDiv.offsetWidth) + 'px';
   } else {
@@ -158,7 +161,7 @@ Blockly.Toolbox.prototype.position_ = function() {
   }
   treeDiv.style.height = svgSize.height + 'px';
   this.width = treeDiv.offsetWidth;
-  if (!Blockly.RTL) {
+  if (!this.workspace_.RTL) {
     // For some reason the LTR toolbox now reports as 1px too wide.
     this.width -= 1;
   }
@@ -230,7 +233,7 @@ Blockly.Toolbox.prototype.getRect = function() {
   var BIG_NUM = 10000000;
   // Assumes that the toolbox is on the SVG edge.  If this changes
   // (e.g. toolboxes in mutators) then this code will need to be more complex.
-  if (Blockly.RTL) {
+  if (this.workspace_.RTL) {
     var svgSize = Blockly.svgSize();
     var x = svgSize.width - this.width;
   } else {

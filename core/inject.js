@@ -193,7 +193,7 @@ Blockly.createDom_ = function(container, options) {
   // then manually positions content in RTL as needed.
   container.setAttribute('dir', 'LTR');
   // Closure can be trusted to create HTML widgets with the proper direction.
-  goog.ui.Component.setDefaultRightToLeft(Blockly.RTL);
+  goog.ui.Component.setDefaultRightToLeft(options.RTL);
 
   // Load CSS.
   Blockly.Css.inject(options.hasCss, options.pathToMedia);
@@ -334,8 +334,8 @@ Blockly.createDom_ = function(container, options) {
               metrics.contentTop + metrics.contentHeight >
               metrics.viewHeight + edgeTop ||
               metrics.contentLeft <
-                  (Blockly.RTL ? metrics.viewLeft : edgeLeft) ||
-              metrics.contentLeft + metrics.contentWidth > (Blockly.RTL ?
+                  (options.RTL ? metrics.viewLeft : edgeLeft) ||
+              metrics.contentLeft + metrics.contentWidth > (options.RTL ?
                   metrics.viewWidth : metrics.viewWidth + edgeLeft)) {
             // One or more blocks may be out of bounds.  Bump them back in.
             var MARGIN = 25;
@@ -355,13 +355,13 @@ Blockly.createDom_ = function(container, options) {
               }
               // Bump any block that's off the left back inside.
               var overflow = MARGIN + edgeLeft -
-                  blockXY.x - (Blockly.RTL ? 0 : blockHW.width);
+                  blockXY.x - (options.RTL ? 0 : blockHW.width);
               if (overflow > 0) {
                 block.moveBy(overflow, 0);
               }
               // Bump any block that's off the right back inside.
               var overflow = edgeLeft + metrics.viewWidth - MARGIN -
-                  blockXY.x + (Blockly.RTL ? blockHW.width : 0);
+                  blockXY.x + (options.RTL ? blockHW.width : 0);
               if (overflow < 0) {
                 block.moveBy(overflow, 0);
               }
@@ -379,7 +379,7 @@ Blockly.createDom_ = function(container, options) {
 
   // Create an HTML container for popup overlays (e.g. editor widgets).
   Blockly.WidgetDiv.DIV = goog.dom.createDom('div', 'blocklyWidgetDiv');
-  Blockly.WidgetDiv.DIV.style.direction = Blockly.RTL ? 'rtl' : 'ltr';
+  Blockly.WidgetDiv.DIV.style.direction = options.RTL ? 'rtl' : 'ltr';
   document.body.appendChild(Blockly.WidgetDiv.DIV);
 
   return mainWorkspace;

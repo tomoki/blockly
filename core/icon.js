@@ -162,13 +162,13 @@ Blockly.Icon.prototype.renderIcon = function(cursorX) {
 
   var TOP_MARGIN = 5;
   var width = this.SIZE;
-  if (Blockly.RTL) {
+  if (this.block_.RTL) {
     cursorX -= width;
   }
   this.iconGroup_.setAttribute('transform',
       'translate(' + cursorX + ', ' + TOP_MARGIN + ')');
   this.computeIconLocation();
-  if (Blockly.RTL) {
+  if (this.block_.RTL) {
     cursorX -= Blockly.BlockSvg.SEP_SPACE_X;
   } else {
     cursorX += width + Blockly.BlockSvg.SEP_SPACE_X;

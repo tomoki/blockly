@@ -42,6 +42,7 @@ Blockly.Workspace = function(opt_options) {
    */
   this.topBlocks_ = [];
   this.options = opt_options || {};
+  this.RTL = !!this.options.RTL;
 };
 
 /**
@@ -111,7 +112,7 @@ Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
   var blocks = [].concat(this.topBlocks_);
   if (ordered && blocks.length > 1) {
     var offset = Math.sin(goog.math.toRadians(Blockly.Workspace.SCAN_ANGLE));
-    if (Blockly.RTL) {
+    if (this.RTL) {
       offset *= -1;
     }
     blocks.sort(function(a, b) {

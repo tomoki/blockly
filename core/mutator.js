@@ -96,7 +96,8 @@ Blockly.Mutator.prototype.createEditor_ = function() {
       {'class': 'blocklyMutatorBackground',
        'height': '100%', 'width': '100%'}, this.svgDialog_);
   var workspaceOptions = {
-    languageTree: true
+    languageTree: true,
+    RTL: this.block_.RTL
   };
   var mutator = this;
   this.workspace_ = new Blockly.WorkspaceSvg(
@@ -133,7 +134,7 @@ Blockly.Mutator.prototype.resizeBubble_ = function() {
   var workspaceSize = this.workspace_.getCanvas().getBBox();
   var flyoutMetrics = this.workspace_.flyout_.getMetrics_();
   var width;
-  if (Blockly.RTL) {
+  if (this.block_.RTL) {
     width = -workspaceSize.x;
   } else {
     width = workspaceSize.width + workspaceSize.x;
@@ -154,7 +155,7 @@ Blockly.Mutator.prototype.resizeBubble_ = function() {
     this.svgDialog_.setAttribute('height', this.workspaceHeight_);
   }
 
-  if (Blockly.RTL) {
+  if (this.block_.RTL) {
     // Scroll the workspace to always left-align.
     var translation = 'translate(' + this.workspaceWidth_ + ',0)';
     this.workspace_.getCanvas().setAttribute('transform', translation);
@@ -194,7 +195,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     this.rootBlock_.setDeletable(false);
     var margin = this.workspace_.flyout_.CORNER_RADIUS * 2;
     var x = this.workspace_.flyout_.width_ + margin;
-    if (Blockly.RTL) {
+    if (this.block_.RTL) {
       x = -x;
     }
     this.rootBlock_.moveBy(x, margin);
@@ -282,7 +283,7 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
  */
 Blockly.Mutator.prototype.getFlyoutMetrics_ = function() {
   var left = 0;
-  if (Blockly.RTL) {
+  if (this.block_.RTL) {
     left += this.workspaceWidth_;
   }
   return {

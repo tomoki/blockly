@@ -176,7 +176,10 @@ Blockly.WorkspaceSvg.prototype.addTrashcan_ = function() {
  * @private
  */
 Blockly.WorkspaceSvg.prototype.addFlyout_ = function() {
-  this.flyout_ = new Blockly.Flyout();
+  var workspaceOptions = {
+    RTL: this.RTL
+  };
+  this.flyout_ = new Blockly.Flyout(workspaceOptions);
   this.flyout_.autoClose = false;
   var svgFlyout = this.flyout_.createDom();
   this.svgGroup_.insertBefore(svgFlyout, this.svgBlockCanvas_);
@@ -337,7 +340,7 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
   var blockX = parseInt(xmlBlock.getAttribute('x'), 10);
   var blockY = parseInt(xmlBlock.getAttribute('y'), 10);
   if (!isNaN(blockX) && !isNaN(blockY)) {
-    if (Blockly.RTL) {
+    if (this.RTL) {
       blockX = -blockX;
     }
     // Offset block until not clobbering another block.
@@ -348,7 +351,7 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
         var otherXY = otherBlock.getRelativeToSurfaceXY();
         if (Math.abs(blockX - otherXY.x) <= 1 &&
             Math.abs(blockY - otherXY.y) <= 1) {
-          if (Blockly.RTL) {
+          if (this.RTL) {
             blockX -= Blockly.SNAP_RADIUS;
           } else {
             blockX += Blockly.SNAP_RADIUS;

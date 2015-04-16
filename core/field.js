@@ -255,7 +255,7 @@ Blockly.Field.prototype.updateTextNode_ = function() {
   goog.dom.removeChildren(/** @type {!Element} */ (this.textElement_));
   // Replace whitespace with non-breaking spaces so the text doesn't collapse.
   text = text.replace(/\s/g, Blockly.Field.NBSP);
-  if (Blockly.RTL && text) {
+  if (this.sourceBlock_.RTL && text) {
     // The SVG is LTR, force text to be RTL.
     text += '\u200F';
   }

@@ -98,8 +98,8 @@ Blockly.FieldDropdown.prototype.init = function(block) {
   // Add dropdown arrow: "option ▾" (LTR) or "▾ אופציה" (RTL)
   this.arrow_ = Blockly.createSvgElement('tspan', {}, null);
   this.arrow_.appendChild(document.createTextNode(
-      Blockly.RTL ? Blockly.FieldDropdown.ARROW_CHAR + ' ' :
-                    ' ' + Blockly.FieldDropdown.ARROW_CHAR));
+      block.RTL ? Blockly.FieldDropdown.ARROW_CHAR + ' ' :
+          ' ' + Blockly.FieldDropdown.ARROW_CHAR));
 
   Blockly.FieldDropdown.superClass_.init.call(this, block);
   // Force a reset of the text to add the arrow.
@@ -183,7 +183,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
   } else {
     xy.y += borderBBox.height;
   }
-  if (Blockly.RTL) {
+  if (this.sourceBlock_.RTL) {
     xy.x += borderBBox.width;
     xy.x += Blockly.FieldDropdown.CHECKMARK_OVERHANG;
     // Don't go offscreen left.
@@ -301,7 +301,7 @@ Blockly.FieldDropdown.prototype.setText = function(text) {
 
   if (this.textElement_) {
     // Insert dropdown arrow.
-    if (Blockly.RTL) {
+    if (this.sourceBlock_.RTL) {
       this.textElement_.insertBefore(this.arrow_, this.textElement_.firstChild);
     } else {
       this.textElement_.appendChild(this.arrow_);

@@ -378,7 +378,7 @@ Blockly.mouseToSvg = function(e) {
  * Starting with an element, walk up the tree looking for the first SVG
  * container.
  * @param {!Element} element Element in an SVG.
- * @return {Element} SVG element or null if none.
+ * @return {Element} SVG container or null if none.
  */
 Blockly.getSvg = function(element) {
   if (element.svg_) {
@@ -386,12 +386,11 @@ Blockly.getSvg = function(element) {
   }
   var svg = element;
   while (svg && svg.nodeName.toLowerCase() != 'svg') {
-    svg = element.parentNode;
+    svg = svg.parentNode;
   }
   element.svg_ = svg;
   return svg;
 };
-
 
 /**
  * Given an array of strings, return the length of the shortest one.
