@@ -281,6 +281,7 @@ Blockly.Tooltip.show_ = function() {
     var textNode = document.createTextNode(lines[i]);
     tspanElement.appendChild(textNode);
   }
+  var rtl = Blockly.Tooltip.element_.RTL;
   // Display the tooltip.
   Blockly.Tooltip.visible = true;
   Blockly.Tooltip.svgGroup_.style.display = 'block';
@@ -292,7 +293,7 @@ Blockly.Tooltip.show_ = function() {
   Blockly.Tooltip.svgBackground_.setAttribute('height', height);
   Blockly.Tooltip.svgShadow_.setAttribute('width', width);
   Blockly.Tooltip.svgShadow_.setAttribute('height', height);
-  if (Blockly.RTL) {
+  if (rtl) {
     // Right-align the paragraph.
     // This cannot be done until the tooltip is rendered on screen.
     var maxWidth = bBox.width;
@@ -304,7 +305,7 @@ Blockly.Tooltip.show_ = function() {
   }
   // Move the tooltip to just below the cursor.
   var anchorX = Blockly.Tooltip.lastXY_.x;
-  if (Blockly.RTL) {
+  if (rtl) {
     anchorX -= Blockly.Tooltip.OFFSET_X + width;
   } else {
     anchorX += Blockly.Tooltip.OFFSET_X;
@@ -316,7 +317,7 @@ Blockly.Tooltip.show_ = function() {
     // Falling off the bottom of the screen; shift the tooltip up.
     anchorY -= bBox.height + 2 * Blockly.Tooltip.OFFSET_Y;
   }
-  if (Blockly.RTL) {
+  if (rtl) {
     // Prevent falling off left edge in RTL mode.
     anchorX = Math.max(Blockly.Tooltip.MARGINS, anchorX);
   } else {

@@ -104,14 +104,15 @@ Blockly.WidgetDiv.hideIfOwner = function(oldOwner) {
  * @param {number} anchorY Vertical location (window coorditates, not body).
  * @param {!goog.math.Size} windowSize Height/width of window.
  * @param {!goog.math.Coordinate} scrollOffset X/y of window scrollbars.
+ * @param {boolean} rtl True if RTL, false if LTR.
  */
 Blockly.WidgetDiv.position = function(anchorX, anchorY, windowSize,
-                                      scrollOffset) {
+                                      scrollOffset, rtl) {
   // Don't let the widget go above the top edge of the window.
   if (anchorY < scrollOffset.y) {
     anchorY = scrollOffset.y;
   }
-  if (Blockly.RTL) {
+  if (rtl) {
     // Don't let the menu go right of the right edge of the window.
     if (anchorX > windowSize.width + scrollOffset.x) {
       anchorX = windowSize.width + scrollOffset.x;

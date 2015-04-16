@@ -197,7 +197,8 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
       xy.x = windowSize.width + scrollOffset.x - menuSize.width;
     }
   }
-  Blockly.WidgetDiv.position(xy.x, xy.y, windowSize, scrollOffset);
+  Blockly.WidgetDiv.position(xy.x, xy.y, windowSize, scrollOffset,
+                             this.sourceBlock_.RTL);
   menu.setAllowAutoFocus(true);
   menuDom.focus();
 };

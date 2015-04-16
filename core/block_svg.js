@@ -606,7 +606,7 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
     this.customContextMenu(options);
   }
 
-  Blockly.ContextMenu.show(e, options);
+  Blockly.ContextMenu.show(e, options, this.RTL);
   Blockly.ContextMenu.currentBlock = this;
 };
 
@@ -1027,7 +1027,7 @@ Blockly.BlockSvg.prototype.disposeUiEffect = function() {
 /**
  * Animate a cloned block and eventually dispose of it.
  * @param {!Element} clone SVG element to animate and dispose of.
- * @param {boolean} rtl True if block was right-to-left.
+ * @param {boolean} rtl True if RTL, false if LTR.
  * @private
  */
 Blockly.BlockSvg.disposeUiStep_ = function(clone, rtl) {

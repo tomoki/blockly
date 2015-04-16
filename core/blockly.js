@@ -476,7 +476,7 @@ Blockly.copy_ = function(block) {
   Blockly.Xml.deleteNext(xmlBlock);
   // Encode start position in XML.
   var xy = block.getRelativeToSurfaceXY();
-  xmlBlock.setAttribute('x', Blockly.RTL ? -xy.x : xy.x);
+  xmlBlock.setAttribute('x', block.RTL ? -xy.x : xy.x);
   xmlBlock.setAttribute('y', xy.y);
   Blockly.clipboard_ = xmlBlock;
 };
@@ -544,7 +544,7 @@ Blockly.showContextMenu_ = function(e) {
     options.push(expandOption);
   }
 
-  Blockly.ContextMenu.show(e, options);
+  Blockly.ContextMenu.show(e, options, workspace.RTL);
 };
 
 /**
@@ -713,8 +713,10 @@ Blockly.getMainWorkspaceMetrics_ = function() {
     // Add a border around the content that is at least half a screenful wide.
     // Ensure border is wide enough that blocks can scroll over entire screen.
     var MARGIN = 5;
-    var leftScroll = Blockly.RTL ? Blockly.Scrollbar.scrollbarThickness : 0;
-    var rightScroll = Blockly.RTL ? 0 : Blockly.Scrollbar.scrollbarThickness;
+    var leftScroll = mainWorkspace.RTL ?
+        Blockly.Scrollbar.scrollbarThickness : 0;
+    var rightScroll = mainWorkspace.RTL ?
+        0 : Blockly.Scrollbar.scrollbarThickness;
     var leftEdge = Math.min(blockBox.x - viewWidth / 2,
         blockBox.x + blockBox.width - viewWidth - leftScroll + MARGIN);
     var rightEdge = Math.max(blockBox.x + blockBox.width + viewWidth / 2,
@@ -731,7 +733,7 @@ Blockly.getMainWorkspaceMetrics_ = function() {
     var bottomEdge = topEdge + blockBox.height;
   }
   var absoluteLeft = 0;
-  if (!Blockly.RTL && mainWorkspace.toolbox_) {
+  if (!mainWorkspace.RTL && mainWorkspace.toolbox_) {
     absoluteLeft = mainWorkspace.toolbox_.width;
   }
   var metrics = {

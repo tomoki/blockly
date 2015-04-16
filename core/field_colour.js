@@ -205,7 +205,8 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
       xy.x = windowSize.width + scrollOffset.x - paletteSize.width;
     }
   }
-  Blockly.WidgetDiv.position(xy.x, xy.y, windowSize, scrollOffset);
+  Blockly.WidgetDiv.position(xy.x, xy.y, windowSize, scrollOffset,
+                             this.sourceBlock_.RTL);
 
   // Configure event handler.
   var thisField = this;
