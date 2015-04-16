@@ -154,18 +154,12 @@ Blockly.OPPOSITE_TYPE[Blockly.PREVIOUS_STATEMENT] = Blockly.NEXT_STATEMENT;
  */
 Blockly.SOUNDS_ = Object.create(null);
 
+// TODO: Delete this (#singletonHunt).
 /**
  * Currently selected block.
  * @type {Blockly.Block}
  */
 Blockly.selected = null;
-
-/**
- * Is Blockly in a read-only, non-editable mode?
- * Note that this property may only be set before init is called.
- * It can't be used to dynamically toggle editability on and off.
- */
-Blockly.readOnly = false;
 
 /**
  * Currently highlighted connection (during a drag).
@@ -206,6 +200,7 @@ Blockly.COLLAPSE_CHARS = 30;
  */
 Blockly.LONGPRESS = 750;
 
+// TODO: Delete this (#singletonHunt).
 /**
  * The main workspace (defined by inject.js).
  * @type {Blockly.Workspace}
@@ -273,34 +268,34 @@ Blockly.svgResize = function() {
  * @private
  */
 Blockly.onMouseDown_ = function(e) {
+  var workspace = Blockly.mainWorkspace;
   Blockly.svgResize();
   Blockly.terminateDrag_();  // In case mouse-up event was lost.
   Blockly.hideChaff();
   var isTargetSvg = e.target && e.target.nodeName &&
       (e.target.nodeName.toLowerCase() == 'svg' ||
-       e.target == Blockly.mainWorkspace.svgBackground_);
-  if (!Blockly.readOnly && Blockly.selected && isTargetSvg) {
+       e.target == workspace.svgBackground_);
+  if (isTargetSvg && Blockly.selected && Blockly.selected.workspace &&
+      !Blockly.selected.workspace.options.readOnly) {
     // Clicking on the document clears the selection.
     Blockly.selected.unselect();
   }
-  if ((e.target == Blockly.svg ||
-       e.target == Blockly.mainWorkspace.svgBackground_) &&
+  if ((e.target == Blockly.svg || e.target == workspace.svgBackground_) &&
       Blockly.isRightButton(e)) {
     // Right-click on main workspace (not in a mutator).
     Blockly.showContextMenu_(e);
-  } else if ((Blockly.readOnly || isTargetSvg) &&
-             Blockly.mainWorkspace.scrollbar) {
+  } else if ((workspace.options.readOnly || isTargetSvg) &&
+             workspace.scrollbar) {
     Blockly.removeAllRanges();
     // If the workspace is editable, only allow dragging when gripping empty
     // space.  Otherwise, allow dragging when gripping anywhere.
-    Blockly.mainWorkspace.dragMode = true;
+    workspace.dragMode = true;
     // Record the current mouse position.
-    Blockly.mainWorkspace.startDragMouseX = e.clientX;
-    Blockly.mainWorkspace.startDragMouseY = e.clientY;
-    Blockly.mainWorkspace.startDragMetrics =
-        Blockly.mainWorkspace.getMetrics();
-    Blockly.mainWorkspace.startScrollX = Blockly.mainWorkspace.scrollX;
-    Blockly.mainWorkspace.startScrollY = Blockly.mainWorkspace.scrollY;
+    workspace.startDragMouseX = e.clientX;
+    workspace.startDragMouseY = e.clientY;
+    workspace.startDragMetrics = workspace.getMetrics();
+    workspace.startScrollX = workspace.scrollX;
+    workspace.startScrollY = workspace.scrollY;
 
     // If this is a touch event then bind to the mouseup so workspace drag mode
     // is turned off and double move events are not performed on a block.

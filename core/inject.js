@@ -314,8 +314,6 @@ Blockly.createDom_ = function(container, options) {
       Blockly.getMainWorkspaceMetrics_, Blockly.setMainWorkspaceMetrics_,
       options);
   // TODO: Delete this (#singletonHunt).
-  Blockly.readOnly = options.readOnly;
-  // TODO: Delete this (#singletonHunt).
   Blockly.mainWorkspace = mainWorkspace;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
   mainWorkspace.maxBlocks = options.maxBlocks;

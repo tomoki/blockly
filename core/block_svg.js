@@ -51,7 +51,6 @@ Blockly.BlockSvg = function() {
       {'class': 'blocklyPathLight'}, this.svgGroup_);
   this.svgPath_.tooltip = this;
   Blockly.Tooltip.bindMouseEvents(this.svgPath_);
-  this.updateMovable();
 };
 goog.inherits(Blockly.BlockSvg, Blockly.Block);
 
@@ -84,7 +83,8 @@ Blockly.BlockSvg.prototype.initSvg = function() {
     this.mutator.createIcon();
   }
   this.updateColour();
-  if (!Blockly.readOnly && !this.eventsInit_) {
+  this.updateMovable();
+  if (!this.workspace.options.readOnly && !this.eventsInit_) {
     Blockly.bindEvent_(this.getSvgRoot(), 'mousedown', this,
                        this.onMouseDown_);
     var thisBlock = this;

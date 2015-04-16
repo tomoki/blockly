@@ -88,7 +88,7 @@ Blockly.Css.inject = function(hasCss, pathToMedia) {
  * @param {Blockly.Cursor} cursor Enum.
  */
 Blockly.Css.setCursor = function(cursor) {
-  if (Blockly.readOnly || Blockly.Css.currentCursor_ == cursor) {
+  if (Blockly.Css.currentCursor_ == cursor) {
     return;
   }
   Blockly.Css.currentCursor_ = cursor;

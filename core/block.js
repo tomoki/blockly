@@ -460,7 +460,8 @@ Blockly.Block.prototype.getDescendants = function() {
  * @return {boolean} True if deletable.
  */
 Blockly.Block.prototype.isDeletable = function() {
-  return this.deletable_ && !Blockly.readOnly;
+  return this.deletable_ &&
+      !(this.workspace && this.workspace.options.readOnly);
 };
 
 /**
@@ -469,7 +470,6 @@ Blockly.Block.prototype.isDeletable = function() {
  */
 Blockly.Block.prototype.setDeletable = function(deletable) {
   this.deletable_ = deletable;
-  this.svg_ && this.svg_.updateMovable();
 };
 
 /**
@@ -477,7 +477,7 @@ Blockly.Block.prototype.setDeletable = function(deletable) {
  * @return {boolean} True if movable.
  */
 Blockly.Block.prototype.isMovable = function() {
-  return this.movable_ && !Blockly.readOnly;
+  return this.movable_ && !(this.workspace && this.workspace.options.readOnly);
 };
 
 /**
@@ -493,7 +493,7 @@ Blockly.Block.prototype.setMovable = function(movable) {
  * @return {boolean} True if editable.
  */
 Blockly.Block.prototype.isEditable = function() {
-  return this.editable_ && !Blockly.readOnly;
+  return this.editable_ && !(this.workspace && this.workspace.options.readOnly);
 };
 
 /**
