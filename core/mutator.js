@@ -95,14 +95,15 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   Blockly.createSvgElement('rect',
       {'class': 'blocklyMutatorBackground',
        'height': '100%', 'width': '100%'}, this.svgDialog_);
+  var mutator = this;
   var workspaceOptions = {
     languageTree: true,
     parentWorkspace: this.block_.workspace,
-    RTL: this.block_.RTL
+    RTL: this.block_.RTL,
+    getMetrics: function() {return mutator.getFlyoutMetrics_();},
+    setMetrics: null
   };
-  var mutator = this;
-  this.workspace_ = new Blockly.WorkspaceSvg(
-      function() {return mutator.getFlyoutMetrics_();}, null, workspaceOptions);
+  this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
   this.svgDialog_.appendChild(
       this.workspace_.createDom('blocklyMutatorBackground'));
   return this.svgDialog_;

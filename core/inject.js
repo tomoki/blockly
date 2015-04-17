@@ -311,9 +311,10 @@ Blockly.createDom_ = function(container, options) {
     }
   }
 
-  var mainWorkspace = new Blockly.WorkspaceSvg(
-      Blockly.getMainWorkspaceMetrics_, Blockly.setMainWorkspaceMetrics_,
-      options);
+  options.parentWorkspace = null;
+  options.getMetrics = Blockly.getMainWorkspaceMetrics_;
+  options.setMetrics = Blockly.setMainWorkspaceMetrics_;
+  var mainWorkspace = new Blockly.WorkspaceSvg(options);
   // TODO: Delete this (#singletonHunt).
   Blockly.mainWorkspace = mainWorkspace;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));

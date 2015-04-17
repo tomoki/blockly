@@ -41,16 +41,14 @@ goog.require('goog.userAgent');
 /**
  * Class for a workspace.  This is an onscreen area with optional trashcan,
  * scrollbars, bubbles, and dragging.
- * @param {Function} getMetrics A function that returns size/scrolling metrics.
- * @param {Function} setMetrics A function that sets size/scrolling metrics.
- * @param {Object} options Dictionary of options.
+ * @param {!Object} options Dictionary of options.
  * @extends {Blockly.Workspace}
  * @constructor
  */
-Blockly.WorkspaceSvg = function(getMetrics, setMetrics, options) {
+Blockly.WorkspaceSvg = function(options) {
   Blockly.WorkspaceSvg.superClass_.constructor.call(this, options);
-  this.getMetrics = getMetrics;
-  this.setMetrics = setMetrics;
+  this.getMetrics = options.getMetrics;
+  this.setMetrics = options.setMetrics;
 
   Blockly.ConnectionDB.init(this);
   /**

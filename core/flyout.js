@@ -37,19 +37,19 @@ goog.require('goog.userAgent');
 
 /**
  * Class for a flyout.
- * @param {Object} workspaceOptions Dictionary of options for the workspace.
+ * @param {!Object} workspaceOptions Dictionary of options for the workspace.
  * @constructor
  */
 Blockly.Flyout = function(workspaceOptions) {
   var flyout = this;
+  workspaceOptions.getMetrics = function() {return flyout.getMetrics_();};
+  workspaceOptions.setMetrics =
+      function(ratio) {return flyout.setMetrics_(ratio);};
   /**
    * @type {!Blockly.Workspace}
    * @private
    */
-  this.workspace_ = new Blockly.WorkspaceSvg(
-      function() {return flyout.getMetrics_();},
-      function(ratio) {return flyout.setMetrics_(ratio);},
-      workspaceOptions);
+  this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
   this.workspace_.isFlyout = true;
 
   /**
