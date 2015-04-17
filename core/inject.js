@@ -96,12 +96,13 @@ Blockly.parseToolboxTree_ = function(tree) {
 Blockly.parseOptions_ = function(options) {
   var readOnly = !!options['readOnly'];
   if (readOnly) {
+    var languageTree = null;
     var hasCategories = false;
     var hasTrashcan = false;
     var hasCollapse = false;
     var hasComments = false;
     var hasDisable = false;
-    var languageTree = null;
+    var hasSounds = false;
   } else {
     var languageTree = Blockly.parseToolboxTree_(options['toolbox']);
     var hasCategories = Boolean(languageTree &&
@@ -122,14 +123,14 @@ Blockly.parseOptions_ = function(options) {
     if (hasDisable === undefined) {
       hasDisable = hasCategories;
     }
+    var hasSounds = options['sounds'];
+    if (hasSounds === undefined) {
+      hasSounds = true;
+    }
   }
   var hasScrollbars = options['scrollbars'];
   if (hasScrollbars === undefined) {
     hasScrollbars = hasCategories;
-  }
-  var hasSounds = options['sounds'];
-  if (hasSounds === undefined) {
-    hasSounds = true;
   }
   var hasCss = options['css'];
   if (hasCss === undefined) {
@@ -447,11 +448,11 @@ Blockly.init_ = function(mainWorkspace) {
 
   // Load the sounds.
   if (options.hasSounds) {
-    Blockly.loadAudio_(
+    mainWorkspace.loadAudio_(
         [options.pathToMedia + 'click.mp3',
          options.pathToMedia + 'click.wav',
          options.pathToMedia + 'click.ogg'], 'click');
-    Blockly.loadAudio_(
+    mainWorkspace.loadAudio_(
         [options.pathToMedia + 'delete.mp3',
          options.pathToMedia + 'delete.ogg',
          options.pathToMedia + 'delete.wav'], 'delete');
@@ -462,7 +463,7 @@ Blockly.init_ = function(mainWorkspace) {
       while (soundBinds.length) {
         Blockly.unbindEvent_(soundBinds.pop());
       }
-      Blockly.preloadAudio_();
+      mainWorkspace.preloadAudio_();
     };
     // Android ignores any sound not loaded as a result of a user action.
     soundBinds.push(

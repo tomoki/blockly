@@ -97,6 +97,7 @@ Blockly.Mutator.prototype.createEditor_ = function() {
        'height': '100%', 'width': '100%'}, this.svgDialog_);
   var workspaceOptions = {
     languageTree: true,
+    parentWorkspace: this.block_.workspace,
     RTL: this.block_.RTL
   };
   var mutator = this;
