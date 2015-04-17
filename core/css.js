@@ -268,28 +268,13 @@ Blockly.Css.CONTENT = [
   '  font-size: 9pt;',
   '}',
 
-  '.blocklyIconShield {',
+  '.blocklyIconGroup {',
   '  cursor: default;',
-  '  fill: #00c;',
-  '  stroke: #ccc;',
-  '  stroke-width: 1px;',
   '}',
 
   '.blocklyIconGroup:not(:hover),',
   '.blocklyIconGroupReadonly {',
   '  opacity: .6;',
-  '}',
-
-  '.blocklyIconMark {',
-  '  cursor: default !important;',
-  '  fill: #ccc;',
-  '  font-family: sans-serif;',
-  '  font-size: 9pt;',
-  '  font-weight: bold;',
-  '  text-anchor: middle;',
-  '}',
-
-  '.blocklyWarningBody {',
   '}',
 
   '.blocklyMinimalBody {',

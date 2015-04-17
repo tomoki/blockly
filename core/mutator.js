@@ -95,9 +95,14 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   Blockly.createSvgElement('rect',
       {'class': 'blocklyMutatorBackground',
        'height': '100%', 'width': '100%'}, this.svgDialog_);
+  // Convert the list of names into a list of XML objects for the flyout.
+  var quarkXml = goog.dom.createDom('xml');
+  for (var i = 0, quarkName; quarkName = this.quarkNames_[i]; i++) {
+    quarkXml.appendChild(goog.dom.createDom('block', {'type': quarkName}));
+  }
   var mutator = this;
   var workspaceOptions = {
-    languageTree: true,
+    languageTree: quarkXml,
     parentWorkspace: this.block_.workspace,
     RTL: this.block_.RTL,
     getMetrics: function() {return mutator.getFlyoutMetrics_();},
@@ -180,12 +185,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
         this.iconX_, this.iconY_, null, null);
     var thisObj = this;
     this.workspace_.flyout_.init(this.workspace_);
-    // Convert the list of names into a list of XML objects for the flyout.
-    var quarkXml = [];
-    for (var i = 0, quarkName; quarkName = this.quarkNames_[i]; i++) {
-      quarkXml[i] = goog.dom.createDom('block', {'type': quarkName});
-    }
-    this.workspace_.flyout_.show(quarkXml);
+    this.workspace_.flyout_.show(this.workspace_.options.languageTree.childNodes);
 
     this.rootBlock_ = this.block_.decompose(this.workspace_);
     var blocks = this.rootBlock_.getDescendants();

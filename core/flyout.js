@@ -126,6 +126,36 @@ Blockly.Flyout.prototype.createDom = function() {
 };
 
 /**
+ * Initializes the flyout.
+ * @param {!Blockly.Workspace} workspace The workspace in which to create new
+ *     blocks.
+ */
+Blockly.Flyout.prototype.init = function(workspace) {
+  this.targetWorkspace_ = workspace;
+  this.workspace_.targetWorkspace = workspace;
+  // Add scrollbar.
+  this.scrollbar_ = new Blockly.Scrollbar(this.workspace_, false, false);
+
+  this.hide();
+
+  // If the document resizes, reposition the flyout.
+  this.eventWrappers_.concat(Blockly.bindEvent_(window,
+      goog.events.EventType.RESIZE, this, this.position_));
+  this.position_();
+  this.eventWrappers_.concat(Blockly.bindEvent_(this.svgGroup_,
+      'wheel', this, this.wheel_));
+  // Safari needs mousewheel.
+  this.eventWrappers_.concat(Blockly.bindEvent_(this.svgGroup_,
+      'mousewheel', this, this.wheel_));
+  this.eventWrappers_.concat(
+      Blockly.bindEvent_(this.targetWorkspace_.getCanvas(),
+      'blocklyWorkspaceChange', this, this.filterForCapacity_));
+  // Dragging the flyout up and down.
+  this.eventWrappers_.concat(Blockly.bindEvent_(this.svgGroup_,
+      'mousedown', this, this.onMouseDown_));
+};
+
+/**
  * Dispose of this flyout.
  * Unlink from all DOM elements to prevent memory leaks.
  */
@@ -200,36 +230,6 @@ Blockly.Flyout.prototype.setMetrics_ = function(yRatio) {
         -metrics.contentHeight * yRatio.y - metrics.contentTop;
   }
   this.workspace_.translate(0, this.workspace_.scrollY + metrics.absoluteTop);
-};
-
-/**
- * Initializes the flyout.
- * @param {!Blockly.Workspace} workspace The workspace in which to create new
- *     blocks.
- */
-Blockly.Flyout.prototype.init = function(workspace) {
-  this.targetWorkspace_ = workspace;
-  this.workspace_.targetWorkspace = workspace;
-  // Add scrollbar.
-  this.scrollbar_ = new Blockly.Scrollbar(this.workspace_, false, false);
-
-  this.hide();
-
-  // If the document resizes, reposition the flyout.
-  this.eventWrappers_.concat(Blockly.bindEvent_(window,
-      goog.events.EventType.RESIZE, this, this.position_));
-  this.position_();
-  this.eventWrappers_.concat(Blockly.bindEvent_(this.svgGroup_,
-      'wheel', this, this.wheel_));
-  // Safari needs mousewheel.
-  this.eventWrappers_.concat(Blockly.bindEvent_(this.svgGroup_,
-      'mousewheel', this, this.wheel_));
-  this.eventWrappers_.concat(
-      Blockly.bindEvent_(this.targetWorkspace_.getCanvas(),
-      'blocklyWorkspaceChange', this, this.filterForCapacity_));
-  // Dragging the flyout up and down.
-  this.eventWrappers_.concat(Blockly.bindEvent_(this.svgGroup_,
-      'mousedown', this, this.onMouseDown_));
 };
 
 /**

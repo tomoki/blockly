@@ -728,10 +728,14 @@ Blockly.removeChangeListener = function(bindData) {
 };
 
 /**
- * Returns the main workspace.
+ * Returns the main workspace.  Returns the last created main workspace.
  * @return {!Blockly.Workspace} The main workspace.
+ * @deprecated April 2015
  */
 Blockly.getMainWorkspace = function() {
+  // Backwards compatability from before there could be multiple workspaces.
+  console.warn('Deprecated call to Blockly.getMainWorkspace, ' +
+               'use Blockly.inject\'s return value instead.');
   return Blockly.mainWorkspace;
 };
 
@@ -742,4 +746,3 @@ if (!goog.global['Blockly']) {
 goog.global['Blockly']['getMainWorkspace'] = Blockly.getMainWorkspace;
 goog.global['Blockly']['addChangeListener'] = Blockly.addChangeListener;
 goog.global['Blockly']['removeChangeListener'] = Blockly.removeChangeListener;
-

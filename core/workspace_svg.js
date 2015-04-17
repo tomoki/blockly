@@ -325,7 +325,7 @@ Blockly.WorkspaceSvg.prototype.highlightBlock = function(id) {
  * edits, mutations, connections, etc.  Groups of simultaneous changes (e.g.
  * a tree of blocks being deleted) are merged into one event.
  * Applications may hook workspace changes by listening for
- * 'blocklyWorkspaceChange' on Blockly.mainWorkspace.getCanvas().
+ * 'blocklyWorkspaceChange' on workspace.getCanvas().
  */
 Blockly.WorkspaceSvg.prototype.fireChangeEvent = function() {
   if (this.rendered && this.svgBlockCanvas_) {

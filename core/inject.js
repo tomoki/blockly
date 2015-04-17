@@ -315,7 +315,7 @@ Blockly.createDom_ = function(container, options) {
   options.getMetrics = Blockly.getMainWorkspaceMetrics_;
   options.setMetrics = Blockly.setMainWorkspaceMetrics_;
   var mainWorkspace = new Blockly.WorkspaceSvg(options);
-  // TODO: Delete this (#singletonHunt).
+  // Backwards compatability from before there could be multiple workspaces.
   Blockly.mainWorkspace = mainWorkspace;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
   mainWorkspace.maxBlocks = options.maxBlocks;
