@@ -392,7 +392,12 @@ Blockly.init_ = function(mainWorkspace) {
   var options = mainWorkspace.options;
   var svg = Blockly.getSvg(mainWorkspace.svgGroup_);
   // Supress the browser's context menu.
-  Blockly.bindEvent_(svg, 'contextmenu', this, Blockly.noEvent);
+  Blockly.bindEvent_(svg, 'contextmenu', this,
+      function(e) {
+        if (!Blockly.isTargetInput_(e)) {
+          e.preventDefault();
+        }
+      });
   // Bind events for scrolling the workspace.
   // Most of these events should be bound to the SVG's surface.
   // However, 'mouseup' has to be on the whole document so that a block dragged

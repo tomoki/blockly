@@ -228,6 +228,19 @@ Blockly.noEvent = function(e) {
 };
 
 /**
+ * Is this event targeting a text input widget?
+ * @param {!Event} e An event.
+ * @return {boolean} True if text input.
+ * @private
+ */
+Blockly.isTargetInput_ = function(e) {
+  return e.target.type == 'textarea' || e.target.type == 'text' ||
+         e.target.type == 'number' || e.target.type == 'email' ||
+         e.target.type == 'password' || e.target.type == 'search' ||
+         e.target.type == 'tel' || e.target.type == 'url';
+};
+
+/**
  * Return the coordinates of the top-left corner of this element relative to
  * its parent.
  * @param {!Element} element Element to find the coordinates of.

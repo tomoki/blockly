@@ -249,7 +249,8 @@ Blockly.Bubble.prototype.bubbleMouseDown_ = function(e) {
   this.promote_();
   Blockly.Bubble.unbindDragEvents_();
   if (Blockly.isRightButton(e)) {
-    // Right-click.
+    // No right-click.
+    e.stopPropagation();
     return;
   } else if (Blockly.isTargetInput_(e)) {
     // When focused on an HTML text input widget, don't trap any events.
@@ -300,7 +301,8 @@ Blockly.Bubble.prototype.resizeMouseDown_ = function(e) {
   this.promote_();
   Blockly.Bubble.unbindDragEvents_();
   if (Blockly.isRightButton(e)) {
-    // Right-click.
+    // No right-click.
+    e.stopPropagation();
     return;
   }
   // Left-click (or middle click)

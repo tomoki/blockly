@@ -467,19 +467,6 @@ Blockly.removeAllRanges = function() {
 };
 
 /**
- * Is this event targeting a text input widget?
- * @param {!Event} e An event.
- * @return {boolean} True if text input.
- * @private
- */
-Blockly.isTargetInput_ = function(e) {
-  return e.target.type == 'textarea' || e.target.type == 'text' ||
-         e.target.type == 'number' || e.target.type == 'email' ||
-         e.target.type == 'password' || e.target.type == 'search' ||
-         e.target.type == 'tel' || e.target.type == 'url';
-};
-
-/**
  * Return an object with all the metrics required to size scrollbars for the
  * main workspace.  The following properties are computed:
  * .viewHeight: Height of the visible rectangle,
@@ -599,18 +586,13 @@ Blockly.doCommand = function(cmdThunk) {
  * @param {!Function} func Function to call.
  * @return {!Array.<!Array>} Opaque data that can be passed to
  *     removeChangeListener.
+ * @deprecated April 2015
  */
 Blockly.addChangeListener = function(func) {
-  return Blockly.bindEvent_(Blockly.mainWorkspace.getCanvas(),
-                            'blocklyWorkspaceChange', null, func);
-};
-
-/**
- * Stop listening for Blockly's workspace changes.
- * @param {!Array.<!Array>} bindData Opaque data from addChangeListener.
- */
-Blockly.removeChangeListener = function(bindData) {
-  Blockly.unbindEvent_(bindData);
+  // Backwards compatability from before there could be multiple workspaces.
+  console.warn('Deprecated call to Blockly.addChangeListener, ' +
+               'use workspace.addChangeListener instead.');
+  return Blockly.mainWorkspace.addChangeListener(func);
 };
 
 /**

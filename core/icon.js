@@ -133,7 +133,7 @@ Blockly.Icon.prototype.isVisible = function() {
  * @private
  */
 Blockly.Icon.prototype.iconClick_ = function(e) {
-  if (!this.block_.isInFlyout) {
+  if (!this.block_.isInFlyout && !Blockly.isRightButton(e)) {
     this.setVisible(!this.isVisible());
   }
 };

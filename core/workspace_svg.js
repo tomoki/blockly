@@ -428,6 +428,9 @@ Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
  * @private
  */
 Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
+  if (Blockly.isTargetInput_(e)) {
+    return;
+  }
   Blockly.svgResize();
   Blockly.terminateDrag_();  // In case mouse-up event was lost.
   Blockly.hideChaff();
@@ -608,5 +611,28 @@ Blockly.WorkspaceSvg.prototype.playAudio = function(name, opt_volume) {
   }
 };
 
+/**
+ * When something in this workspace changes, call a function.
+ * @param {!Function} func Function to call.
+ * @return {!Array.<!Array>} Opaque data that can be passed to
+ *     removeChangeListener.
+ */
+Blockly.WorkspaceSvg.prototype.addChangeListener = function(func) {
+  return Blockly.bindEvent_(this.getCanvas(),
+                            'blocklyWorkspaceChange', null, func);
+};
+
+/**
+ * Stop listening for this workspace's changes.
+ * @param {!Array.<!Array>} bindData Opaque data from addChangeListener.
+ */
+Blockly.WorkspaceSvg.prototype.removeChangeListener = function(bindData) {
+  Blockly.unbindEvent_(bindData);
+};
+
 // Export symbols that would otherwise be renamed by Closure compiler.
 Blockly.WorkspaceSvg.prototype['clear'] = Blockly.WorkspaceSvg.prototype.clear;
+Blockly.WorkspaceSvg.prototype['addChangeListener'] =
+    Blockly.WorkspaceSvg.prototype.addChangeListener;
+Blockly.WorkspaceSvg.prototype['removeChangeListener'] =
+    Blockly.WorkspaceSvg.prototype.removeChangeListener;
