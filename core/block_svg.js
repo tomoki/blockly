@@ -757,6 +757,15 @@ Blockly.BlockSvg.prototype.updateMovable = function() {
 };
 
 /**
+ * Set whether this block is movable or not.
+ * @param {boolean} movable True if movable.
+ */
+Blockly.BlockSvg.prototype.setMovable = function(movable) {
+  Blockly.BlockSvg.superClass_.setMovable.call(this, movable);
+  this.updateMovable();
+};
+
+/**
  * Return the root node of the SVG or null if none exists.
  * @return {Element} The root SVG node (probably a group).
  */

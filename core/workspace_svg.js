@@ -130,6 +130,8 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
     this.addTrashcan_();
   }
 
+  Blockly.bindEvent_(this.svgGroup_, 'mousedown', this, this.onMouseDown_);
+
   // Determine if there needs to be a category tree, or a simple list of
   // blocks.  This cannot be changed later, since the UI is very different.
   if (this.options.hasCategories) {
@@ -342,6 +344,7 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
       this.remainingCapacity()) {
     return;
   }
+  Blockly.terminateDrag_();  // Dragging while pasting?  No.
   var block = Blockly.Xml.domToBlock(this, xmlBlock);
   // Move the duplicate to original position.
   var blockX = parseInt(xmlBlock.getAttribute('x'), 10);
@@ -417,6 +420,117 @@ Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
   }
   Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
   return false;
+};
+
+/**
+ * Handle a mouse-down on SVG drawing surface.
+ * @param {!Event} e Mouse down event.
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
+  Blockly.svgResize();
+  Blockly.terminateDrag_();  // In case mouse-up event was lost.
+  Blockly.hideChaff();
+  var isTargetWorkspace = e.target && e.target.nodeName &&
+      (e.target.nodeName.toLowerCase() == 'svg' ||
+       e.target == this.svgBackground_);
+  if (isTargetWorkspace && Blockly.selected && !this.options.readOnly) {
+    // Clicking on the document clears the selection.
+    Blockly.selected.unselect();
+  }
+  if (Blockly.isRightButton(e)) {
+    // Right-click.
+    this.showContextMenu_(e);
+  } else if (this.scrollbar) {
+    Blockly.removeAllRanges();
+    // If the workspace is editable, only allow dragging when gripping empty
+    // space.  Otherwise, allow dragging when gripping anywhere.
+    this.dragMode = true;
+    // Record the current mouse position.
+    this.startDragMouseX = e.clientX;
+    this.startDragMouseY = e.clientY;
+    this.startDragMetrics = this.getMetrics();
+    this.startScrollX = this.scrollX;
+    this.startScrollY = this.scrollY;
+
+    // If this is a touch event then bind to the mouseup so workspace drag mode
+    // is turned off and double move events are not performed on a block.
+    // See comment in inject.js Blockly.init_ as to why mouseup events are
+    // bound to the document instead of the SVG's surface.
+    if ('mouseup' in Blockly.bindEvent_.TOUCH_MAP) {
+      Blockly.onTouchUpWrapper_ =
+          Blockly.bindEvent_(document, 'mouseup', null, Blockly.onMouseUp_);
+    }
+    Blockly.onMouseMoveWrapper_ =
+        Blockly.bindEvent_(document, 'mousemove', null, Blockly.onMouseMove_);
+  }
+  // This event has been handled.  No need to bubble up to the document.
+  e.stopPropagation();
+};
+
+/**
+ * Show the context menu for the workspace.
+ * @param {!Event} e Mouse event.
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
+  if (this.options.readOnly) {
+    return;
+  }
+  var menuOptions = [];
+  // Add a little animation to collapsing and expanding.
+  var COLLAPSE_DELAY = 10;
+
+  if (this.options.collapse) {
+    var hasCollapsedBlocks = false;
+    var hasExpandedBlocks = false;
+    var topBlocks = this.getTopBlocks(false);
+    for (var i = 0; i < topBlocks.length; i++) {
+      var block = topBlocks[i];
+      while (block) {
+        if (block.isCollapsed()) {
+          hasCollapsedBlocks = true;
+        } else {
+          hasExpandedBlocks = true;
+        }
+        block = block.getNextBlock();
+      }
+    }
+
+    // Option to collapse top blocks.
+    var collapseOption = {enabled: hasExpandedBlocks};
+    collapseOption.text = Blockly.Msg.COLLAPSE_ALL;
+    collapseOption.callback = function() {
+      var ms = 0;
+      for (var i = 0; i < topBlocks.length; i++) {
+        var block = topBlocks[i];
+        while (block) {
+          setTimeout(block.setCollapsed.bind(block, true), ms);
+          block = block.getNextBlock();
+          ms += COLLAPSE_DELAY;
+        }
+      }
+    };
+    menuOptions.push(collapseOption);
+
+    // Option to expand top blocks.
+    var expandOption = {enabled: hasCollapsedBlocks};
+    expandOption.text = Blockly.Msg.EXPAND_ALL;
+    expandOption.callback = function() {
+      var ms = 0;
+      for (var i = 0; i < topBlocks.length; i++) {
+        var block = topBlocks[i];
+        while (block) {
+          setTimeout(block.setCollapsed.bind(block, false), ms);
+          block = block.getNextBlock();
+          ms += COLLAPSE_DELAY;
+        }
+      }
+    };
+    menuOptions.push(expandOption);
+  }
+
+  Blockly.ContextMenu.show(e, menuOptions, this.RTL);
 };
 
 /**

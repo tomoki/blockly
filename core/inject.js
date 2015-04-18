@@ -391,16 +391,14 @@ Blockly.createDom_ = function(container, options) {
 Blockly.init_ = function(mainWorkspace) {
   var options = mainWorkspace.options;
   var svg = Blockly.getSvg(mainWorkspace.svgGroup_);
+  // Supress the browser's context menu.
+  Blockly.bindEvent_(svg, 'contextmenu', this, Blockly.noEvent);
   // Bind events for scrolling the workspace.
   // Most of these events should be bound to the SVG's surface.
   // However, 'mouseup' has to be on the whole document so that a block dragged
   // out of bounds and released will know that it has been released.
   // Also, 'keydown' has to be on the whole document since the browser doesn't
   // understand a concept of focus on the SVG image.
-  Blockly.bindEvent_(svg, 'mousedown', null, Blockly.onMouseDown_);
-  Blockly.bindEvent_(svg, 'contextmenu', null, Blockly.onContextMenu_);
-  Blockly.bindEvent_(Blockly.WidgetDiv.DIV, 'contextmenu', null,
-                     Blockly.onContextMenu_);
 
   Blockly.bindEvent_(svg, 'touchstart', null,
                      function(e) {Blockly.longStart_(e, null);});
