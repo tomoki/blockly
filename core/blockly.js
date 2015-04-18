@@ -260,7 +260,7 @@ Blockly.svgResize = function() {
  */
 Blockly.onMouseUp_ = function(e) {
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
-  Blockly.mainWorkspace.dragMode = false;
+  Blockly.mainWorkspace.isScrolling = false;
 
   // Unbind the touch event if it exists.
   if (Blockly.onTouchUpWrapper_) {
@@ -279,7 +279,7 @@ Blockly.onMouseUp_ = function(e) {
  * @private
  */
 Blockly.onMouseMove_ = function(e) {
-  if (Blockly.mainWorkspace.dragMode) {
+  if (Blockly.mainWorkspace.isScrolling) {
     Blockly.removeAllRanges();
     var dx = e.clientX - Blockly.mainWorkspace.startDragMouseX;
     var dy = e.clientY - Blockly.mainWorkspace.startDragMouseY;
@@ -481,28 +481,28 @@ Blockly.removeAllRanges = function() {
  * .absoluteLeft: Left-edge of view.
  * @return {Object} Contains size and position metrics of main workspace.
  * @private
+ * @this Blockly.WorkspaceSvg
  */
 Blockly.getMainWorkspaceMetrics_ = function() {
-  var mainWorkspace = Blockly.mainWorkspace;
   var svgSize = Blockly.svgSize();
-  if (mainWorkspace.toolbox_) {
-    svgSize.width -= mainWorkspace.toolbox_.width;
+  if (this.toolbox_) {
+    svgSize.width -= this.toolbox_.width;
   }
   var viewWidth = svgSize.width - Blockly.Scrollbar.scrollbarThickness;
   var viewHeight = svgSize.height - Blockly.Scrollbar.scrollbarThickness;
   try {
-    var blockBox = mainWorkspace.getCanvas().getBBox();
+    var blockBox = this.getCanvas().getBBox();
   } catch (e) {
     // Firefox has trouble with hidden elements (Bug 528969).
     return null;
   }
-  if (mainWorkspace.scrollbar) {
+  if (this.scrollbar) {
     // Add a border around the content that is at least half a screenful wide.
     // Ensure border is wide enough that blocks can scroll over entire screen.
     var MARGIN = 5;
-    var leftScroll = mainWorkspace.RTL ?
+    var leftScroll = this.RTL ?
         Blockly.Scrollbar.scrollbarThickness : 0;
-    var rightScroll = mainWorkspace.RTL ?
+    var rightScroll = this.RTL ?
         0 : Blockly.Scrollbar.scrollbarThickness;
     var leftEdge = Math.min(blockBox.x - viewWidth / 2,
         blockBox.x + blockBox.width - viewWidth - leftScroll + MARGIN);
@@ -520,16 +520,16 @@ Blockly.getMainWorkspaceMetrics_ = function() {
     var bottomEdge = topEdge + blockBox.height;
   }
   var absoluteLeft = 0;
-  if (!mainWorkspace.RTL && mainWorkspace.toolbox_) {
-    absoluteLeft = mainWorkspace.toolbox_.width;
+  if (!this.RTL && this.toolbox_) {
+    absoluteLeft = this.toolbox_.width;
   }
   var metrics = {
     viewHeight: svgSize.height,
     viewWidth: svgSize.width,
     contentHeight: bottomEdge - topEdge,
     contentWidth: rightEdge - leftEdge,
-    viewTop: -mainWorkspace.scrollY,
-    viewLeft: -mainWorkspace.scrollX,
+    viewTop: -this.scrollY,
+    viewLeft: -this.scrollX,
     contentTop: topEdge,
     contentLeft: leftEdge,
     absoluteTop: 0,
@@ -543,26 +543,28 @@ Blockly.getMainWorkspaceMetrics_ = function() {
  * @param {!Object} xyRatio Contains an x and/or y property which is a float
  *     between 0 and 1 specifying the degree of scrolling.
  * @private
+ * @this Blockly.WorkspaceSvg
  */
 Blockly.setMainWorkspaceMetrics_ = function(xyRatio) {
-  var mainWorkspace = Blockly.mainWorkspace;
-  if (!mainWorkspace.scrollbar) {
+  if (!this.scrollbar) {
     throw 'Attempt to set main workspace scroll without scrollbars.';
   }
-  var metrics = Blockly.getMainWorkspaceMetrics_();
+  var metrics = this.getMetrics();
   if (goog.isNumber(xyRatio.x)) {
-    mainWorkspace.scrollX = -metrics.contentWidth * xyRatio.x -
+    this.scrollX = -metrics.contentWidth * xyRatio.x -
         metrics.contentLeft;
   }
   if (goog.isNumber(xyRatio.y)) {
-    mainWorkspace.scrollY = -metrics.contentHeight * xyRatio.y -
+    this.scrollY = -metrics.contentHeight * xyRatio.y -
         metrics.contentTop;
   }
-  var x = mainWorkspace.scrollX + metrics.absoluteLeft;
-  var y = mainWorkspace.scrollY + metrics.absoluteTop;
-  mainWorkspace.translate(x, y);
-  mainWorkspace.gridPattern_.setAttribute('x', x);
-  mainWorkspace.gridPattern_.setAttribute('y', y);
+  var x = this.scrollX + metrics.absoluteLeft;
+  var y = this.scrollY + metrics.absoluteTop;
+  this.translate(x, y);
+  if (this.options.gridPattern) {
+    this.options.gridPattern.setAttribute('x', x);
+    this.options.gridPattern.setAttribute('y', y);
+  }
 };
 
 /**

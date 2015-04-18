@@ -47,7 +47,10 @@ Blockly.inject = function(container, opt_options) {
   var options = Blockly.parseOptions_(opt_options || {});
   var workspace;
   var startUi = function() {
-    workspace = Blockly.createDom_(container, options);
+    var svg = Blockly.createDom_(container, options);
+    // TODO: Delete this (#singletonHunt).
+    Blockly.svg = svg;
+    workspace = Blockly.createMainWorkspace_(svg, options);
     Blockly.init_(workspace);
   };
   if (options.enableRealtime) {
@@ -185,7 +188,7 @@ Blockly.parseOptions_ = function(options) {
  * Create the SVG image.
  * @param {!Element} container Containing element.
  * @param {Object} options Dictionary of options.
- * @return {!Blockly.Workspace} Newly created main workspace.
+ * @return {!Element} Newly created SVG image.
  * @private
  */
 Blockly.createDom_ = function(container, options) {
@@ -217,8 +220,6 @@ Blockly.createDom_ = function(container, options) {
     'version': '1.1',
     'class': 'blocklySvg'
   }, container);
-  // TODO: Delete this (#singletonHunt).
-  Blockly.svg = svg;
   /*
   <defs>
     ... filters go here ...
@@ -310,7 +311,18 @@ Blockly.createDom_ = function(container, options) {
           gridPattern);
     }
   }
+  options.gridPattern = gridPattern;
+  return svg;
+};
 
+/**
+ * Create a main workspace and add it to the SVG.
+ * @param {!Element} svg SVG element with pattern defined.
+ * @param {Object} options Dictionary of options.
+ * @return {!Blockly.Workspace} Newly created main workspace.
+ * @private
+ */
+Blockly.createMainWorkspace_ = function(svg, options) {
   options.parentWorkspace = null;
   options.getMetrics = Blockly.getMainWorkspaceMetrics_;
   options.setMetrics = Blockly.setMainWorkspaceMetrics_;
@@ -319,7 +331,6 @@ Blockly.createDom_ = function(container, options) {
   Blockly.mainWorkspace = mainWorkspace;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
   mainWorkspace.maxBlocks = options.maxBlocks;
-  mainWorkspace.gridPattern_ = gridPattern;
 
   if (!options.readOnly) {
     if (!options.hasScrollbars) {

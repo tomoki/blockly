@@ -73,10 +73,10 @@ Blockly.WorkspaceSvg.prototype.rendered = true;
 Blockly.WorkspaceSvg.prototype.isFlyout = false;
 
 /**
- * Can this workspace be dragged around (true) or is it fixed (false)?
+ * Is this workspace currently being dragged around?
  * @type {boolean}
  */
-Blockly.WorkspaceSvg.prototype.dragMode = false;
+Blockly.WorkspaceSvg.prototype.isScrolling = false;
 
 /**
  * Current horizontal scrolling offset.
@@ -446,9 +446,9 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
     this.showContextMenu_(e);
   } else if (this.scrollbar) {
     Blockly.removeAllRanges();
-    // If the workspace is editable, only allow dragging when gripping empty
-    // space.  Otherwise, allow dragging when gripping anywhere.
-    this.dragMode = true;
+    // If the workspace is editable, only allow scrolling when gripping empty
+    // space.  Otherwise, allow scrolling when gripping anywhere.
+    this.isScrolling = true;
     // Record the current mouse position.
     this.startDragMouseX = e.clientX;
     this.startDragMouseY = e.clientY;
