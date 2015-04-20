@@ -52,6 +52,8 @@ Blockly.inject = function(container, opt_options) {
     Blockly.svg = svg;
     workspace = Blockly.createMainWorkspace_(svg, options);
     Blockly.init_(workspace);
+    workspace.markFocused();
+    Blockly.bindEvent_(svg, 'focus', workspace, workspace.markFocused);
   };
   if (options.enableRealtime) {
     var realtimeElement = document.getElementById('realtime');
@@ -327,10 +329,9 @@ Blockly.createMainWorkspace_ = function(svg, options) {
   options.getMetrics = Blockly.getMainWorkspaceMetrics_;
   options.setMetrics = Blockly.setMainWorkspaceMetrics_;
   var mainWorkspace = new Blockly.WorkspaceSvg(options);
-  // Backwards compatability from before there could be multiple workspaces.
-  Blockly.mainWorkspace = mainWorkspace;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
-  mainWorkspace.maxBlocks = options.maxBlocks;
+  // TODO: Delete this (#singletonHunt).
+  mainWorkspace.markFocused();
 
   if (!options.readOnly) {
     if (!options.hasScrollbars) {

@@ -191,9 +191,9 @@ Blockly.COLLAPSE_CHARS = 30;
  */
 Blockly.LONGPRESS = 750;
 
-// TODO: Delete this (#singletonHunt).
 /**
- * The main workspace (defined by inject.js).
+ * The main workspace most recently used.
+ * Set by Blockly.WorkspaceSvg.prototype.markFocused
  * @type {Blockly.Workspace}
  */
 Blockly.mainWorkspace = null;
@@ -203,7 +203,14 @@ Blockly.mainWorkspace = null;
  * @type {Element}
  * @private
  */
-Blockly.clipboard_ = null;
+Blockly.clipboardXml_ = null;
+
+/**
+ * Source of the local clipboard.
+ * @type {Blockly.Workspace}
+ * @private
+ */
+Blockly.clipboardSource_ = null;
 
 /**
  * Is the mouse dragging a block?
@@ -333,8 +340,7 @@ Blockly.onKeyDown_ = function(e) {
     }
   } else if (e.altKey || e.ctrlKey || e.metaKey) {
     if (Blockly.selected &&
-        Blockly.selected.isDeletable() && Blockly.selected.isMovable() &&
-        !Blockly.selected.workspace.options.parentWorkspace) {
+        Blockly.selected.isDeletable() && Blockly.selected.isMovable()) {
       Blockly.hideChaff();
       if (e.keyCode == 67) {
         // 'c' for copy.
@@ -347,8 +353,8 @@ Blockly.onKeyDown_ = function(e) {
     }
     if (e.keyCode == 86) {
       // 'v' for paste.
-      if (Blockly.clipboard_) {
-        Blockly.mainWorkspace.paste(Blockly.clipboard_);
+      if (Blockly.clipboardXml_) {
+        Blockly.clipboardSource_.paste(Blockly.clipboardXml_);
       }
     }
   }
@@ -416,7 +422,8 @@ Blockly.copy_ = function(block) {
   var xy = block.getRelativeToSurfaceXY();
   xmlBlock.setAttribute('x', block.RTL ? -xy.x : xy.x);
   xmlBlock.setAttribute('y', xy.y);
-  Blockly.clipboard_ = xmlBlock;
+  Blockly.clipboardXml_ = xmlBlock;
+  Blockly.clipboardSource_ = block.workspace;
 };
 
 /**
@@ -594,18 +601,15 @@ Blockly.addChangeListener = function(func) {
   // Backwards compatability from before there could be multiple workspaces.
   console.warn('Deprecated call to Blockly.addChangeListener, ' +
                'use workspace.addChangeListener instead.');
-  return Blockly.mainWorkspace.addChangeListener(func);
+  return Blockly.getMainWorkspace().addChangeListener(func);
 };
 
 /**
- * Returns the main workspace.  Returns the last created main workspace.
+ * Returns the main workspace.  Returns the last used main workspace (based on
+ * focus).
  * @return {!Blockly.Workspace} The main workspace.
- * @deprecated April 2015
  */
 Blockly.getMainWorkspace = function() {
-  // Backwards compatability from before there could be multiple workspaces.
-  console.warn('Deprecated call to Blockly.getMainWorkspace, ' +
-               'use Blockly.inject\'s return value instead.');
   return Blockly.mainWorkspace;
 };
 

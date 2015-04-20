@@ -227,7 +227,7 @@ Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
  */
 Blockly.WorkspaceSvg.prototype.addTopBlock = function(block) {
   Blockly.WorkspaceSvg.superClass_.addTopBlock.call(this, block);
-  if (Blockly.Realtime.isEnabled() && this == Blockly.mainWorkspace) {
+  if (Blockly.Realtime.isEnabled() && !this.options.parentWorkspace) {
     Blockly.Realtime.addTopBlock(block);
   }
 };
@@ -238,7 +238,7 @@ Blockly.WorkspaceSvg.prototype.addTopBlock = function(block) {
  */
 Blockly.WorkspaceSvg.prototype.removeTopBlock = function(block) {
   Blockly.WorkspaceSvg.superClass_.removeTopBlock.call(this, block);
-  if (Blockly.Realtime.isEnabled() && this == Blockly.mainWorkspace) {
+  if (Blockly.Realtime.isEnabled() && !this.options.parentWorkspace) {
     Blockly.Realtime.removeTopBlock(block);
   }
 };
@@ -340,7 +340,7 @@ Blockly.WorkspaceSvg.prototype.fireChangeEvent = function() {
  * @param {!Element} xmlBlock XML block element.
  */
 Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
-  if (xmlBlock.getElementsByTagName('block').length >=
+  if (!this.rendered || xmlBlock.getElementsByTagName('block').length >=
       this.remainingCapacity()) {
     return;
   }
@@ -628,6 +628,14 @@ Blockly.WorkspaceSvg.prototype.addChangeListener = function(func) {
  */
 Blockly.WorkspaceSvg.prototype.removeChangeListener = function(bindData) {
   Blockly.unbindEvent_(bindData);
+};
+
+/**
+ * Mark this workspace as the currently focused main workspace.  Used by
+ * paste to determine which workspace to paste into.
+ */
+Blockly.WorkspaceSvg.prototype.markFocused = function() {
+  Blockly.mainWorkspace = this;
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.

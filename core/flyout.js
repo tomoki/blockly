@@ -652,6 +652,23 @@ Blockly.Flyout.prototype.filterForCapacity_ = function() {
 };
 
 /**
+ * Return the deletion rectangle for this flyout.
+ * @return {goog.math.Rect} Rectangle in which to delete.
+ */
+Blockly.Flyout.prototype.getRect = function() {
+  // BIG_NUM is offscreen padding so that blocks dragged beyond the shown flyout
+  // area are still deleted.  Must be smaller than Infinity, but larger than
+  // the largest screen size.
+  var BIG_NUM = 10000000;
+  var x = Blockly.getSvgXY_(this.svgGroup_).x;
+  if (!this.RTL) {
+    x -= BIG_NUM;
+  }
+  return new goog.math.Rect(x, -BIG_NUM,
+      BIG_NUM + this.width_, this.height_ + 2 * BIG_NUM);
+};
+
+/**
  * Stop binding to the global mouseup and mousemove events.
  * @private
  */
@@ -675,21 +692,4 @@ Blockly.Flyout.terminateDrag_ = function() {
   Blockly.Flyout.startDownEvent_ = null;
   Blockly.Flyout.startBlock_ = null;
   Blockly.Flyout.startFlyout_ = null;
-};
-
-/**
- * Return the deletion rectangle for this flyout.
- * @return {goog.math.Rect} Rectangle in which to delete.
- */
-Blockly.Flyout.prototype.getRect = function() {
-  // BIG_NUM is offscreen padding so that blocks dragged beyond the shown flyout
-  // area are still deleted.  Must be smaller than Infinity, but larger than
-  // the largest screen size.
-  var BIG_NUM = 10000000;
-  var x = Blockly.getSvgXY_(this.svgGroup_).x;
-  if (!this.RTL) {
-    x -= BIG_NUM;
-  }
-  return new goog.math.Rect(x, -BIG_NUM,
-      BIG_NUM + this.width_, this.height_ + 2 * BIG_NUM);
 };

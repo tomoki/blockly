@@ -52,12 +52,6 @@ Blockly.Workspace = function(opt_options) {
 Blockly.Workspace.prototype.rendered = false;
 
 /**
- * Maximum number of blocks allowed in this workspace.
- * @type number
- */
-Blockly.Workspace.prototype.maxBlocks = Infinity;
-
-/**
  * Dispose of this workspace.
  * Unlink from all DOM elements to prevent memory leaks.
  */
@@ -177,10 +171,10 @@ Blockly.Workspace.prototype.getBlockById = function(id) {
  * @return {number} Number of blocks left.
  */
 Blockly.Workspace.prototype.remainingCapacity = function() {
-  if (this.maxBlocks == Infinity) {
+  if (isNaN(this.options.maxBlocks)) {
     return Infinity;
   }
-  return this.maxBlocks - this.getAllBlocks().length;
+  return this.options.maxBlocks - this.getAllBlocks().length;
 };
 
 /**
