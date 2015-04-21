@@ -123,6 +123,10 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
     this.svgBackground_ = Blockly.createSvgElement('rect',
         {'height': '100%', 'width': '100%',
          'class': opt_backgroundClass}, this.svgGroup_);
+    if (opt_backgroundClass == 'blocklyMainBackground') {
+      this.svgBackground_.style.fill =
+          'url(#' + this.options.gridPattern.id + ')';
+    }
   }
   this.svgBlockCanvas_ = Blockly.createSvgElement('g', {}, this.svgGroup_);
   this.svgBubbleCanvas_ = Blockly.createSvgElement('g', {}, this.svgGroup_);
@@ -428,6 +432,7 @@ Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
  * @private
  */
 Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
+  this.markFocused();
   if (Blockly.isTargetInput_(e)) {
     return;
   }
@@ -631,8 +636,7 @@ Blockly.WorkspaceSvg.prototype.removeChangeListener = function(bindData) {
 };
 
 /**
- * Mark this workspace as the currently focused main workspace.  Used by
- * paste to determine which workspace to paste into.
+ * Mark this workspace as the currently focused main workspace.
  */
 Blockly.WorkspaceSvg.prototype.markFocused = function() {
   Blockly.mainWorkspace = this;

@@ -255,6 +255,7 @@ Blockly.svgResize = function() {
     svg.cachedHeight_ = height;
   }
   // Update the scrollbars (if they exist).
+  // TODO: Delete this (#singletonHunt).
   if (Blockly.mainWorkspace.scrollbar) {
     Blockly.mainWorkspace.scrollbar.resize();
   }
@@ -266,8 +267,9 @@ Blockly.svgResize = function() {
  * @private
  */
 Blockly.onMouseUp_ = function(e) {
+  var workspace = Blockly.getMainWorkspace();
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
-  Blockly.mainWorkspace.isScrolling = false;
+  workspace.isScrolling = false;
 
   // Unbind the touch event if it exists.
   if (Blockly.onTouchUpWrapper_) {
@@ -286,13 +288,14 @@ Blockly.onMouseUp_ = function(e) {
  * @private
  */
 Blockly.onMouseMove_ = function(e) {
-  if (Blockly.mainWorkspace.isScrolling) {
+  var workspace = Blockly.getMainWorkspace();
+  if (workspace.isScrolling) {
     Blockly.removeAllRanges();
-    var dx = e.clientX - Blockly.mainWorkspace.startDragMouseX;
-    var dy = e.clientY - Blockly.mainWorkspace.startDragMouseY;
-    var metrics = Blockly.mainWorkspace.startDragMetrics;
-    var x = Blockly.mainWorkspace.startScrollX + dx;
-    var y = Blockly.mainWorkspace.startScrollY + dy;
+    var dx = e.clientX - workspace.startDragMouseX;
+    var dy = e.clientY - workspace.startDragMouseY;
+    var metrics = workspace.startDragMetrics;
+    var x = workspace.startScrollX + dx;
+    var y = workspace.startScrollY + dy;
     x = Math.min(x, -metrics.contentLeft);
     y = Math.min(y, -metrics.contentTop);
     x = Math.max(x, metrics.viewWidth - metrics.contentLeft -
@@ -301,7 +304,7 @@ Blockly.onMouseMove_ = function(e) {
                  metrics.contentHeight);
 
     // Move the scrollbars and the page will scroll automatically.
-    Blockly.mainWorkspace.scrollbar.set(-x - metrics.contentLeft,
+    workspace.scrollbar.set(-x - metrics.contentLeft,
                                         -y - metrics.contentTop);
     // Cancel the long-press if the drag has moved too far.
     var dr = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
@@ -443,13 +446,14 @@ Blockly.onContextMenu_ = function(e) {
  * @param {boolean=} opt_allowToolbox If true, don't close the toolbox.
  */
 Blockly.hideChaff = function(opt_allowToolbox) {
+  var workspace = Blockly.getMainWorkspace();
   Blockly.Tooltip.hide();
   Blockly.WidgetDiv.hide();
   if (!opt_allowToolbox &&
-      Blockly.mainWorkspace.toolbox_ &&
-      Blockly.mainWorkspace.toolbox_.flyout_ &&
-      Blockly.mainWorkspace.toolbox_.flyout_.autoClose) {
-    Blockly.mainWorkspace.toolbox_.clearSelection();
+      workspace.toolbox_ &&
+      workspace.toolbox_.flyout_ &&
+      workspace.toolbox_.flyout_.autoClose) {
+    workspace.toolbox_.clearSelection();
   }
 };
 

@@ -71,6 +71,10 @@ Blockly.Css.mediaPath_ = '';
  * @param {string} pathToMedia Path from page to the Blockly media directory.
  */
 Blockly.Css.inject = function(hasCss, pathToMedia) {
+  // Only inject the CSS once.
+  if (Blockly.Css.styleSheet_) {
+    return;
+  }
   // Placeholder for cursor rule.  Must be first rule (index 0).
   var text = '.blocklyDraggable {}\n';
   if (hasCss) {
@@ -117,15 +121,13 @@ Blockly.Css.setCursor = function(cursor) {
       toolbox.style.cursor = url;
     }
   }
-  // Set cursor on the SVG surface as well, so that rapid movements
+  // Set cursor on the whole document, so that rapid movements
   // don't result in cursor changing to an arrow momentarily.
-  var svg = Blockly.svg;
-  if (svg) {
-    if (cursor == Blockly.Css.Cursor.OPEN) {
-      svg.style.cursor = '';
-    } else {
-      svg.style.cursor = url;
-    }
+  var html = document.body.parentNode;
+  if (cursor == Blockly.Css.Cursor.OPEN) {
+    html.style.cursor = '';
+  } else {
+    html.style.cursor = url;
   }
 };
 
@@ -300,7 +302,6 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyMainBackground {',
-  '  fill: url(#blocklyGridPattern);',
   '  stroke-width: 1;',
   '  stroke: #c6c6c6;',  /* Equates to #ddd due to border being off-pixel. */
   '}',

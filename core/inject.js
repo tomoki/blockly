@@ -281,14 +281,14 @@ Blockly.createDom_ = function(container, options) {
   Blockly.createSvgElement('path',
       {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'}, disabledPattern);
   /*
-    <pattern id="blocklyGridPattern" patternUnits="userSpaceOnUse"
+    <pattern id="blocklyGridPattern837493" patternUnits="userSpaceOnUse"
              width="10" height="10">
       <rect width="1" height="1" stroke="#888" />
       <rect width="1" height="1" stroke="#888" />
     </pattern>
   */
   var gridPattern = Blockly.createSvgElement('pattern',
-      {'id': 'blocklyGridPattern',
+      {'id': 'blocklyGridPattern' + String(Math.random()).substring(2),
        'patternUnits': 'userSpaceOnUse',
        'width': options.gridOptions['spacing'],
        'height': options.gridOptions['spacing']}, defs);
@@ -314,6 +314,7 @@ Blockly.createDom_ = function(container, options) {
     }
   }
   options.gridPattern = gridPattern;
+  options.svg = svg;
   return svg;
 };
 
@@ -330,7 +331,6 @@ Blockly.createMainWorkspace_ = function(svg, options) {
   options.setMetrics = Blockly.setMainWorkspaceMetrics_;
   var mainWorkspace = new Blockly.WorkspaceSvg(options);
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
-  // TODO: Delete this (#singletonHunt).
   mainWorkspace.markFocused();
 
   if (!options.readOnly) {

@@ -152,7 +152,7 @@ Blockly.Toolbox.prototype.init = function() {
  */
 Blockly.Toolbox.prototype.position_ = function() {
   var treeDiv = this.HtmlDiv;
-  var svgBox = goog.style.getBorderBox(Blockly.svg);
+  var svgBox = goog.style.getBorderBox(this.workspace_.options.svg);
   var svgSize = Blockly.svgSize();
   if (this.workspace_.RTL) {
     var xy = Blockly.convertCoordinates(0, 0, false);
