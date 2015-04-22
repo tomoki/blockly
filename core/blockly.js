@@ -229,12 +229,13 @@ Blockly.dragMode_ = 0;
 Blockly.onTouchUpWrapper_ = null;
 
 /**
- * Returns the dimensions of the current SVG image.
+ * Returns the dimensions of the specified SVG image.
+ * @param {!Element} svg SVG image.
  * @return {!Object} Contains width and height properties.
  */
-Blockly.svgSize = function() {
-  return {width: Blockly.svg.cachedWidth_,
-          height: Blockly.svg.cachedHeight_};
+Blockly.svgSize = function(svg) {
+  return {width: svg.cachedWidth_,
+          height: svg.cachedHeight_};
 };
 
 /**
@@ -495,7 +496,7 @@ Blockly.removeAllRanges = function() {
  * @this Blockly.WorkspaceSvg
  */
 Blockly.getMainWorkspaceMetrics_ = function() {
-  var svgSize = Blockly.svgSize();
+  var svgSize = Blockly.svgSize(this.options.svg);
   if (this.toolbox_) {
     svgSize.width -= this.toolbox_.width;
   }

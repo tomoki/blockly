@@ -382,16 +382,10 @@ Blockly.createMainWorkspace_ = function(svg, options) {
       Blockly.addChangeListener(workspaceChanged);
     }
   }
-
-  svg.appendChild(Blockly.Tooltip.createDom());
   // The SVG is now fully assembled.
   Blockly.svgResize();
-
-  // Create an HTML container for popup overlays (e.g. editor widgets).
-  Blockly.WidgetDiv.DIV = goog.dom.createDom('div', 'blocklyWidgetDiv');
-  Blockly.WidgetDiv.DIV.style.direction = options.RTL ? 'rtl' : 'ltr';
-  document.body.appendChild(Blockly.WidgetDiv.DIV);
-
+  Blockly.WidgetDiv.createDom();
+  Blockly.Tooltip.createDom()
   return mainWorkspace;
 };
 

@@ -33,7 +33,7 @@ goog.require('goog.dom');
 
 
 /**
- * The HTML container.  Set once by inject.js's Blockly.createDom_.
+ * The HTML container.  Set once by Blockly.WidgetDiv.createDom.
  * @type Element
  */
 Blockly.WidgetDiv.DIV = null;
@@ -53,15 +53,29 @@ Blockly.WidgetDiv.owner_ = null;
 Blockly.WidgetDiv.dispose_ = null;
 
 /**
+ * Create the widget div and inject it onto the page.
+ */
+Blockly.WidgetDiv.createDom = function() {
+  if (Blockly.WidgetDiv.DIV) {
+    return;  // Already created.
+  }
+  // Create an HTML container for popup overlays (e.g. editor widgets).
+  Blockly.WidgetDiv.DIV = goog.dom.createDom('div', 'blocklyWidgetDiv');
+  document.body.appendChild(Blockly.WidgetDiv.DIV);
+};
+
+/**
  * Initialize and display the widget div.  Close the old one if needed.
  * @param {!Object} newOwner The object that will be using this container.
+ * @param {boolean} rtl Right-to-left (true) or left-to-right (false).
  * @param {Function} dispose Optional cleanup function to be run when the widget
  *   is closed.
  */
-Blockly.WidgetDiv.show = function(newOwner, dispose) {
+Blockly.WidgetDiv.show = function(newOwner, rtl, dispose) {
   Blockly.WidgetDiv.hide();
   Blockly.WidgetDiv.owner_ = newOwner;
   Blockly.WidgetDiv.dispose_ = dispose;
+  Blockly.WidgetDiv.DIV.style.direction = rtl ? 'rtl' : 'ltr';
   Blockly.WidgetDiv.DIV.style.display = 'block';
 };
 

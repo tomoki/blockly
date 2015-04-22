@@ -46,7 +46,7 @@ Blockly.ContextMenu.currentBlock = null;
  * @param {boolean} rtl True if RTL, false if LTR.
  */
 Blockly.ContextMenu.show = function(e, options, rtl) {
-  Blockly.WidgetDiv.show(Blockly.ContextMenu, null);
+  Blockly.WidgetDiv.show(Blockly.ContextMenu, rtl, null);
   if (!options.length) {
     Blockly.ContextMenu.hide();
     return;

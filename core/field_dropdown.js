@@ -113,7 +113,7 @@ Blockly.FieldDropdown.prototype.init = function(block) {
  * @private
  */
 Blockly.FieldDropdown.prototype.showEditor_ = function() {
-  Blockly.WidgetDiv.show(this, null);
+  Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL, null);
   var thisField = this;
 
   function callback(e) {

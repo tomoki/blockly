@@ -167,7 +167,8 @@ Blockly.FieldColour.prototype.setColumns = function(columns) {
  * @private
  */
 Blockly.FieldColour.prototype.showEditor_ = function() {
-  Blockly.WidgetDiv.show(this, Blockly.FieldColour.widgetDispose_);
+  Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL,
+      Blockly.FieldColour.widgetDispose_);
   // Create the palette using Closure.
   var picker = new goog.ui.ColorPicker();
   picker.setSize(this.columns_ || Blockly.FieldColour.COLUMNS);

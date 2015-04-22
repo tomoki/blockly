@@ -147,6 +147,20 @@ Blockly.Css.CONTENT = [
   '  z-index: 999;',
   '}',
 
+  '.blocklyTooltipDiv {',
+  '  background-color: #ffffc7;',
+  '  border: 1px solid #ddc;',
+  '  box-shadow: 4px 4px 20px 1px rgba(0,0,0,.15);',
+  '  colour: #000;',
+  '  display: none;',
+  '  font-family: sans-serif;',
+  '  font-size: 9pt;',
+  '  opacity: 0.9;',
+  '  padding: 2px;',
+  '  position: absolute;',
+  '  z-index: 1000;',
+  '}',
+
   '.blocklyResizeSE {',
   '  cursor: se-resize;',
   '  fill: #aaa;',
@@ -251,24 +265,6 @@ Blockly.Css.CONTENT = [
 
   '.blocklyFieldDropdown:not(.blocklyHidden) {',
   '  display: block;',
-  '}',
-
-  '.blocklyTooltipBackground {',
-  '  fill: #ffffc7;',
-  '  stroke: #d8d8d8;',
-  '  stroke-width: 1px;',
-  '}',
-
-  '.blocklyTooltipShadow,',
-  '.blocklyDropdownMenuShadow {',
-  '  fill: #bbb;',
-  '  filter: url(#blocklyShadowFilter);',
-  '}',
-
-  '.blocklyTooltipText {',
-  '  fill: #000;',
-  '  font-family: sans-serif;',
-  '  font-size: 9pt;',
   '}',
 
   '.blocklyIconGroup {',

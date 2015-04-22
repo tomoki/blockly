@@ -153,7 +153,7 @@ Blockly.Toolbox.prototype.init = function() {
 Blockly.Toolbox.prototype.position_ = function() {
   var treeDiv = this.HtmlDiv;
   var svgBox = goog.style.getBorderBox(this.workspace_.options.svg);
-  var svgSize = Blockly.svgSize();
+  var svgSize = Blockly.svgSize(this.workspace_.options.svg);
   if (this.workspace_.RTL) {
     var xy = Blockly.convertCoordinates(0, 0, false);
     treeDiv.style.left = (xy.x + svgSize.width - treeDiv.offsetWidth) + 'px';
@@ -235,7 +235,7 @@ Blockly.Toolbox.prototype.getRect = function() {
   // Assumes that the toolbox is on the SVG edge.  If this changes
   // (e.g. toolboxes in mutators) then this code will need to be more complex.
   if (this.workspace_.RTL) {
-    var svgSize = Blockly.svgSize();
+    var svgSize = Blockly.svgSize(this.workspace_.options.svg);
     var x = svgSize.width - this.width;
   } else {
     var x = -BIG_NUM;
