@@ -97,9 +97,13 @@ Blockly.hasClass_ = function(element, className) {
  * @private
  */
 Blockly.bindEvent_ = function(node, name, thisObject, func) {
-  var wrapFunc = function(e) {
-    func.call(thisObject, e);
-  };
+  if (thisObject) {
+    var wrapFunc = function(e) {
+      func.call(thisObject, e);
+    };
+  } else {
+    var wrapFunc = func;
+  }
   node.addEventListener(name, wrapFunc, false);
   var bindData = [[node, name, wrapFunc]];
   // Add equivalent touch event.

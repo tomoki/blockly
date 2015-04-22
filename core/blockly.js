@@ -241,9 +241,14 @@ Blockly.svgSize = function(svg) {
 /**
  * Size the SVG image to completely fill its container.
  * Record the height/width of the SVG image.
+ * @param {!Blockly.WorkspaceSvg} workspace Any workspace in the SVG.
  */
-Blockly.svgResize = function() {
-  var svg = Blockly.svg;
+Blockly.svgResize = function(workspace) {
+  var mainWorkspace = workspace;
+  while (mainWorkspace.options.parentWorkspace) {
+    mainWorkspace = mainWorkspace.options.parentWorkspace;
+  }
+  var svg = Blockly.getSvg(mainWorkspace.svgGroup_);
   var div = svg.parentNode;
   var width = div.offsetWidth;
   var height = div.offsetHeight;
@@ -257,8 +262,8 @@ Blockly.svgResize = function() {
   }
   // Update the scrollbars (if they exist).
   // TODO: Delete this (#singletonHunt).
-  if (Blockly.mainWorkspace.scrollbar) {
-    Blockly.mainWorkspace.scrollbar.resize();
+  if (mainWorkspace.scrollbar) {
+    mainWorkspace.scrollbar.resize();
   }
 };
 

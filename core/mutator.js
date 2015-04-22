@@ -92,9 +92,6 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   this.svgDialog_ = Blockly.createSvgElement('svg',
       {'x': Blockly.Bubble.BORDER_WIDTH, 'y': Blockly.Bubble.BORDER_WIDTH},
       null);
-  Blockly.createSvgElement('rect',
-      {'class': 'blocklyMutatorBackground',
-       'height': '100%', 'width': '100%'}, this.svgDialog_);
   // Convert the list of names into a list of XML objects for the flyout.
   var quarkXml = goog.dom.createDom('xml');
   for (var i = 0, quarkName; quarkName = this.quarkNames_[i]; i++) {

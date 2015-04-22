@@ -383,7 +383,7 @@ Blockly.createMainWorkspace_ = function(svg, options) {
     }
   }
   // The SVG is now fully assembled.
-  Blockly.svgResize();
+  Blockly.svgResize(mainWorkspace);
   Blockly.WidgetDiv.createDom();
   Blockly.Tooltip.createDom()
   return mainWorkspace;
@@ -413,11 +413,12 @@ Blockly.init_ = function(mainWorkspace) {
 
   Blockly.bindEvent_(svg, 'touchstart', null,
                      function(e) {Blockly.longStart_(e, null);});
+  Blockly.bindEvent_(window, 'resize', null,
+                     function() {Blockly.svgResize(mainWorkspace);});
 
   if (!Blockly.documentEventsBound_) {
     // Only bind the window/document events once.
     // Destroying and reinjecting Blockly should not bind again.
-    Blockly.bindEvent_(window, 'resize', document, Blockly.svgResize);
     Blockly.bindEvent_(document, 'keydown', null, Blockly.onKeyDown_);
     Blockly.bindEvent_(document, 'touchend', null, Blockly.longStop_);
     Blockly.bindEvent_(document, 'touchcancel', null, Blockly.longStop_);

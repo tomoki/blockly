@@ -375,7 +375,7 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
     return;
   }
   // Update Blockly's knowledge of its own location.
-  Blockly.svgResize();
+  Blockly.svgResize(this.workspace);
   Blockly.terminateDrag_();
   this.select();
   Blockly.hideChaff();
