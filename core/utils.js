@@ -344,17 +344,18 @@ Blockly.isRightButton = function(e) {
  * @param {number} y Y input coordinate.
  * @param {boolean} toSvg True to convert to SVG coordinates.
  *     False to convert to mouse/HTML coordinates.
+ * @param {!Element} svg SVG element.
  * @return {!Object} Object with x and y properties in output coordinates.
  */
-Blockly.convertCoordinates = function(x, y, toSvg) {
+Blockly.convertCoordinates = function(x, y, toSvg, svg) {
   if (toSvg) {
     x -= window.scrollX || window.pageXOffset;
     y -= window.scrollY || window.pageYOffset;
   }
-  var svgPoint = Blockly.svg.createSVGPoint();
+  var svgPoint = svg.createSVGPoint();
   svgPoint.x = x;
   svgPoint.y = y;
-  var matrix = Blockly.svg.getScreenCTM();
+  var matrix = svg.getScreenCTM();
   if (toSvg) {
     matrix = matrix.inverse();
   }
@@ -370,31 +371,14 @@ Blockly.convertCoordinates = function(x, y, toSvg) {
  * Return the converted coordinates of the given mouse event.
  * The origin (0,0) is the top-left corner of the Blockly svg.
  * @param {!Event} e Mouse event.
+ * @param {!Element} svg SVG element.
  * @return {!Object} Object with .x and .y properties.
  */
-Blockly.mouseToSvg = function(e) {
+Blockly.mouseToSvg = function(e, svg) {
   var scrollX = window.scrollX || window.pageXOffset;
   var scrollY = window.scrollY || window.pageYOffset;
   return Blockly.convertCoordinates(e.clientX + scrollX,
-                                    e.clientY + scrollY, true);
-};
-
-/**
- * Starting with an element, walk up the tree looking for the first SVG
- * container.
- * @param {!Element} element Element in an SVG.
- * @return {Element} SVG container or null if none.
- */
-Blockly.getSvg = function(element) {
-  if (element.svg_) {
-    return element.svg_;
-  }
-  var svg = element;
-  while (svg && svg.nodeName.toLowerCase() != 'svg') {
-    svg = svg.parentNode;
-  }
-  element.svg_ = svg;
-  return svg;
+                                    e.clientY + scrollY, true, svg);
 };
 
 /**

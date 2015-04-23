@@ -384,31 +384,15 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
  * Make a list of all the delete areas for this workspace.
  */
 Blockly.WorkspaceSvg.prototype.recordDeleteAreas = function() {
-  // Nested workspaces (such as mutators) have offsets from the root.
-  var offsetX = 0;
-  var offsetY = 0;
-  var workspace = this;
-  while (workspace.options.parentWorkspace) {
-    var xy = Blockly.getSvgXY_(Blockly.getSvg(workspace.getCanvas()));
-    workspace = workspace.options.parentWorkspace;
-    offsetX += xy.x;
-    offsetY += xy.y;
-  }
   if (this.trashcan) {
     this.deleteAreaTrash_ = this.trashcan.getRect();
-    this.deleteAreaTrash_.left += offsetX;
-    this.deleteAreaTrash_.top += offsetY;
   } else {
     this.deleteAreaTrash_ = null;
   }
   if (this.flyout_) {
     this.deleteAreaToolbox_ = this.flyout_.getRect();
-    this.deleteAreaToolbox_.left += offsetX;
-    this.deleteAreaToolbox_.top += offsetY;
   } else if (this.toolbox_) {
     this.deleteAreaToolbox_ = this.toolbox_.getRect();
-    this.deleteAreaToolbox_.left += offsetX;
-    this.deleteAreaToolbox_.top += offsetY;
   } else {
     this.deleteAreaToolbox_ = null;
   }
@@ -422,7 +406,7 @@ Blockly.WorkspaceSvg.prototype.recordDeleteAreas = function() {
  */
 Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
   var isDelete = false;
-  var mouseXY = Blockly.mouseToSvg(e);
+  var mouseXY = Blockly.mouseToSvg(e, this.options.svg);
   var xy = new goog.math.Coordinate(mouseXY.x, mouseXY.y);
   if (this.deleteAreaTrash_) {
     if (this.deleteAreaTrash_.contains(xy)) {

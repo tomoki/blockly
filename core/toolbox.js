@@ -96,7 +96,7 @@ Blockly.Toolbox.prototype.CONFIG_ = {
  */
 Blockly.Toolbox.prototype.init = function() {
   var workspace = this.workspace_;
-  var svg = Blockly.getSvg(workspace.svgGroup_);
+  var svg = workspace.options.svg;
 
   // Create an HTML container for the Toolbox menu.
   this.HtmlDiv = goog.dom.createDom('div', 'blocklyToolboxDiv');
@@ -151,11 +151,12 @@ Blockly.Toolbox.prototype.init = function() {
  * @private
  */
 Blockly.Toolbox.prototype.position_ = function() {
+  var svg = this.workspace_.options.svg;
   var treeDiv = this.HtmlDiv;
-  var svgBox = goog.style.getBorderBox(this.workspace_.options.svg);
-  var svgSize = Blockly.svgSize(this.workspace_.options.svg);
+  var svgBox = goog.style.getBorderBox(svg);
+  var svgSize = Blockly.svgSize(svg);
   if (this.workspace_.RTL) {
-    var xy = Blockly.convertCoordinates(0, 0, false);
+    var xy = Blockly.convertCoordinates(0, 0, false, svg);
     treeDiv.style.left = (xy.x + svgSize.width - treeDiv.offsetWidth) + 'px';
   } else {
     treeDiv.style.marginLeft = svgBox.left;

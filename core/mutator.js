@@ -103,7 +103,8 @@ Blockly.Mutator.prototype.createEditor_ = function() {
     parentWorkspace: this.block_.workspace,
     RTL: this.block_.RTL,
     getMetrics: function() {return mutator.getFlyoutMetrics_();},
-    setMetrics: null
+    setMetrics: null,
+    svg: this.svgDialog_
   };
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
   this.svgDialog_.appendChild(

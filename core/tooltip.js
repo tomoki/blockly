@@ -194,9 +194,8 @@ Blockly.Tooltip.onMouseMove_ = function(e) {
   if (Blockly.Tooltip.visible) {
     // Compute the distance between the mouse position when the tooltip was
     // shown and the current mouse position.  Pythagorean theorem.
-    var mouseXY = Blockly.mouseToSvg(e);
-    var dx = Blockly.Tooltip.lastX_ - mouseXY.x;
-    var dy = Blockly.Tooltip.lastY_ - mouseXY.y;
+    var dx = Blockly.Tooltip.lastX_ - e.clientX;
+    var dy = Blockly.Tooltip.lastY_ - e.clientY;
     var dr = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
     if (dr > Blockly.Tooltip.RADIUS_OK) {
       Blockly.Tooltip.hide();

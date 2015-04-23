@@ -48,8 +48,6 @@ Blockly.inject = function(container, opt_options) {
   var workspace;
   var startUi = function() {
     var svg = Blockly.createDom_(container, options);
-    // TODO: Delete this (#singletonHunt).
-    Blockly.svg = svg;
     workspace = Blockly.createMainWorkspace_(svg, options);
     Blockly.init_(workspace);
     workspace.markFocused();
@@ -396,7 +394,7 @@ Blockly.createMainWorkspace_ = function(svg, options) {
  */
 Blockly.init_ = function(mainWorkspace) {
   var options = mainWorkspace.options;
-  var svg = Blockly.getSvg(mainWorkspace.svgGroup_);
+  var svg = mainWorkspace.options.svg;
   // Supress the browser's context menu.
   Blockly.bindEvent_(svg, 'contextmenu', this,
       function(e) {

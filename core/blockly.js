@@ -248,7 +248,7 @@ Blockly.svgResize = function(workspace) {
   while (mainWorkspace.options.parentWorkspace) {
     mainWorkspace = mainWorkspace.options.parentWorkspace;
   }
-  var svg = Blockly.getSvg(mainWorkspace.svgGroup_);
+  var svg = mainWorkspace.options.svg;
   var div = svg.parentNode;
   var width = div.offsetWidth;
   var height = div.offsetHeight;
@@ -261,7 +261,6 @@ Blockly.svgResize = function(workspace) {
     svg.cachedHeight_ = height;
   }
   // Update the scrollbars (if they exist).
-  // TODO: Delete this (#singletonHunt).
   if (mainWorkspace.scrollbar) {
     mainWorkspace.scrollbar.resize();
   }
