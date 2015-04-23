@@ -246,8 +246,8 @@ Blockly.isTargetInput_ = function(e) {
 
 /**
  * Return the coordinates of the top-left corner of this element relative to
- * its parent.
- * @param {!Element} element Element to find the coordinates of.
+ * its parent.  Only for SVG elements and children (e.g. rect, g, path).
+ * @param {!Element} element SVG element to find the coordinates of.
  * @return {!Object} Object with .x and .y properties.
  * @private
  */
@@ -281,7 +281,7 @@ Blockly.getRelativeXY_ = function(element) {
 
 /**
  * Return the absolute coordinates of the top-left corner of this element.
- * The origin (0,0) is the top-left corner of the Blockly svg.
+ * The origin (0,0) is the top-left corner of the nearest SVG.
  * @param {!Element} element Element to find the coordinates of.
  * @return {!Object} Object with .x and .y properties.
  * @private
@@ -295,20 +295,8 @@ Blockly.getSvgXY_ = function(element) {
     x += xy.x;
     y += xy.y;
     element = element.parentNode;
-  } while (element && element != Blockly.svg);
+  } while (element && element.nodeName.toLowerCase() != 'svg');
   return {x: x, y: y};
-};
-
-/**
- * Return the absolute coordinates of the top-left corner of this element.
- * The origin (0,0) is the top-left corner of the page body.
- * @param {!Element} element Element to find the coordinates of.
- * @return {!Object} Object with .x and .y properties.
- * @private
- */
-Blockly.getAbsoluteXY_ = function(element) {
-  var xy = Blockly.getSvgXY_(element);
-  return Blockly.convertCoordinates(xy.x, xy.y, false);
 };
 
 /**
