@@ -200,9 +200,9 @@ Blockly.BlockSvg.terminateDrag_ = function() {
       delete selected.draggedBubbles_;
       selected.setDragging_(false);
       selected.render();
-      if (this.workspace &&
-          this.workspace.options.gridOptions &&
-          this.workspace.options.gridOptions['snap']) {
+      if (selected.workspace &&
+          selected.workspace.options.gridOptions &&
+          selected.workspace.options.gridOptions['snap']) {
         goog.Timer.callOnce(
             selected.snapToGrid_, Blockly.BUMP_DELAY / 2, selected);
       }
@@ -293,7 +293,7 @@ Blockly.BlockSvg.prototype.snapToGrid_ = function() {
   if (this.isInFlyout) {
     return;  // Don't move blocks around in a flyout.
   }
-  var spacing = this.options.gridOptions['spacing'];
+  var spacing = this.workspace.options.gridOptions['spacing'];
   var half = spacing / 2;
   var xy = this.getRelativeToSurfaceXY();
   var dx = Math.round((xy.x - half) / spacing) * spacing + half - xy.x;
