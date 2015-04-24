@@ -467,7 +467,7 @@ function init() {
 
   var expandList = [
     document.getElementById('blockly'),
-    document.getElementById('previewFrame'),
+    document.getElementById('preview'),
     document.getElementById('languagePre'),
     document.getElementById('generatorPre')
   ];

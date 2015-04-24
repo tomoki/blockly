@@ -248,14 +248,6 @@ Blockly.WorkspaceSvg.prototype.removeTopBlock = function(block) {
 };
 
 /**
- * Dispose of all blocks in workspace.
- */
-Blockly.WorkspaceSvg.prototype.clear = function() {
-  Blockly.hideChaff();
-  Blockly.WorkspaceSvg.superClass_.clear.call(this);
-};
-
-/**
  * Returns the horizontal offset of the workspace.
  * Intended for LTR/RTL compatibility in XML.
  * @return {number} Width.
