@@ -983,8 +983,10 @@ Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR =
  */
 Blockly.BlockSvg.prototype.dispose = function(healStack, animate,
                                               opt_dontRemoveFromWorkspace) {
-  // If there's a drag in-progress, unlink the mouse events.
-  Blockly.terminateDrag_();
+  // If this block is being dragged, unlink the mouse events.
+  if (Blockly.selected == this) {
+    Blockly.terminateDrag_();
+  }
   // If this block has a context menu open, close it.
   if (Blockly.ContextMenu.currentBlock == this) {
     Blockly.ContextMenu.hide();

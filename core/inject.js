@@ -331,54 +331,52 @@ Blockly.createMainWorkspace_ = function(svg, options) {
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
   mainWorkspace.markFocused();
 
-  if (!options.readOnly) {
-    if (!options.hasScrollbars) {
-      var workspaceChanged = function() {
-        if (Blockly.dragMode_ == 0) {
-          var metrics = mainWorkspace.getMetrics();
-          var edgeLeft = metrics.viewLeft + metrics.absoluteLeft;
-          var edgeTop = metrics.viewTop + metrics.absoluteTop;
-          if (metrics.contentTop < edgeTop ||
-              metrics.contentTop + metrics.contentHeight >
-              metrics.viewHeight + edgeTop ||
-              metrics.contentLeft <
-                  (options.RTL ? metrics.viewLeft : edgeLeft) ||
-              metrics.contentLeft + metrics.contentWidth > (options.RTL ?
-                  metrics.viewWidth : metrics.viewWidth + edgeLeft)) {
-            // One or more blocks may be out of bounds.  Bump them back in.
-            var MARGIN = 25;
-            var blocks = mainWorkspace.getTopBlocks(false);
-            for (var b = 0, block; block = blocks[b]; b++) {
-              var blockXY = block.getRelativeToSurfaceXY();
-              var blockHW = block.getHeightWidth();
-              // Bump any block that's above the top back inside.
-              var overflow = edgeTop + MARGIN - blockHW.height - blockXY.y;
-              if (overflow > 0) {
-                block.moveBy(0, overflow);
-              }
-              // Bump any block that's below the bottom back inside.
-              var overflow = edgeTop + metrics.viewHeight - MARGIN - blockXY.y;
-              if (overflow < 0) {
-                block.moveBy(0, overflow);
-              }
-              // Bump any block that's off the left back inside.
-              var overflow = MARGIN + edgeLeft -
-                  blockXY.x - (options.RTL ? 0 : blockHW.width);
-              if (overflow > 0) {
-                block.moveBy(overflow, 0);
-              }
-              // Bump any block that's off the right back inside.
-              var overflow = edgeLeft + metrics.viewWidth - MARGIN -
-                  blockXY.x + (options.RTL ? blockHW.width : 0);
-              if (overflow < 0) {
-                block.moveBy(overflow, 0);
-              }
+  if (!options.readOnly && !options.hasScrollbars) {
+    var workspaceChanged = function() {
+      if (Blockly.dragMode_ == 0) {
+        var metrics = mainWorkspace.getMetrics();
+        var edgeLeft = metrics.viewLeft + metrics.absoluteLeft;
+        var edgeTop = metrics.viewTop + metrics.absoluteTop;
+        if (metrics.contentTop < edgeTop ||
+            metrics.contentTop + metrics.contentHeight >
+            metrics.viewHeight + edgeTop ||
+            metrics.contentLeft <
+                (options.RTL ? metrics.viewLeft : edgeLeft) ||
+            metrics.contentLeft + metrics.contentWidth > (options.RTL ?
+                metrics.viewWidth : metrics.viewWidth + edgeLeft)) {
+          // One or more blocks may be out of bounds.  Bump them back in.
+          var MARGIN = 25;
+          var blocks = mainWorkspace.getTopBlocks(false);
+          for (var b = 0, block; block = blocks[b]; b++) {
+            var blockXY = block.getRelativeToSurfaceXY();
+            var blockHW = block.getHeightWidth();
+            // Bump any block that's above the top back inside.
+            var overflow = edgeTop + MARGIN - blockHW.height - blockXY.y;
+            if (overflow > 0) {
+              block.moveBy(0, overflow);
+            }
+            // Bump any block that's below the bottom back inside.
+            var overflow = edgeTop + metrics.viewHeight - MARGIN - blockXY.y;
+            if (overflow < 0) {
+              block.moveBy(0, overflow);
+            }
+            // Bump any block that's off the left back inside.
+            var overflow = MARGIN + edgeLeft -
+                blockXY.x - (options.RTL ? 0 : blockHW.width);
+            if (overflow > 0) {
+              block.moveBy(overflow, 0);
+            }
+            // Bump any block that's off the right back inside.
+            var overflow = edgeLeft + metrics.viewWidth - MARGIN -
+                blockXY.x + (options.RTL ? blockHW.width : 0);
+            if (overflow < 0) {
+              block.moveBy(overflow, 0);
             }
           }
         }
-      };
-      Blockly.addChangeListener(workspaceChanged);
-    }
+      }
+    };
+    mainWorkspace.addChangeListener(workspaceChanged);
   }
   // The SVG is now fully assembled.
   Blockly.svgResize(mainWorkspace);
